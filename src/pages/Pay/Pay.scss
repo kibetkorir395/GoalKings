@@ -1,0 +1,70 @@
+.pay{
+    width: 100%;
+    min-height: calc(100vh - 95px);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    background: linear-gradient(to bottom, var(--transparent), var(--light-blue));
+
+    h4{
+      text-align: center;
+    }
+
+    form.method{
+        width: 100%;
+        max-width: 800px;
+        gap: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 5px;
+
+        fieldset{
+            width: 100%;
+            max-width: 250px;
+            padding: 0;
+            border: 0;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            label{
+                text-transform: uppercase;
+                letter-spacing: .1rem;
+                background: #E8E8E8;
+                text-align: center;
+                padding: .5em;
+                cursor: pointer;
+                width: 100%;
+                border-radius: .5rem;
+                border: 1px solid #ccc;
+                position: relative;
+                z-index: 1;
+
+                &:hover{
+                    background: #D8D8D8;
+                }
+              }
+
+
+              input[type="radio"]{
+                visibility: hidden;
+                position: absolute;
+                cursor: pointer;
+              }
+              input[type="radio"]:checked{
+                ~ label{
+                  background: var(--primary-dark);
+                  color: var(--lite);
+                  box-shadow: 0 0.2em 0.45em 0.1em rgba(0,0,0, 0.4);
+                  transform: scale(1.05);
+                  animation: checked 200ms 1;
+                  border: 1px solid var(--primary-dark);
+                  position: relative;
+                  z-index: 5;
+                }
+              }
+        }
+    }
+}

@@ -1,0 +1,13 @@
+# Allow all bots
+User-agent: *
+Disallow:
+
+# Specify the sitemap location
+Sitemap: https://goalkings.com/sitemap.xml
+
+# (Optional) Restrict access to certain areas
+Disallow: /add-post/
+Disallow: /edit-post/
+Disallow: /add-tip/
+Disallow: /edit-tip/
+Disallow: /users/

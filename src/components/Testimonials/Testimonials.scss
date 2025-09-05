@@ -1,0 +1,90 @@
+.testimonials{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: linear-gradient(to bottom, var(--light-blue), var(--lite));
+    .wrapper{
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        overflow-x: scroll;
+        scroll-snap-type: proximity;
+        scroll-margin: 5px;
+        &::-webkit-scrollbar{
+            width: 1px;
+            display: none;
+        }
+
+        &::-webkit-scrollbar-track{
+            display: none;
+        }
+
+        &::-webkit-scrollbar-thumb{
+            background: var(--primary-dark);
+            border-radius: 2px;
+          }
+
+        .testimonial{
+            width: calc((100% - 30px) / 4);
+            min-width: 290px;
+            box-shadow: 0 8px 30px -7px var(--light-blue);
+            border-radius: 10px;
+            padding: 5px 5px;
+            margin: 5px 5px;
+            border: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            justify-content: space-between;
+
+            //background: linear-gradient(to right, var(--light-blue), var(--transparent));
+            &:hover{
+                box-shadow: var(--shadow);
+            }
+            h2{
+                width: 100%;
+                color: var(--grey);
+                font-size: 21px;
+                line-height: 1.3;
+                text-align: end;
+                &::before{
+                    content: "@";
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+            }
+
+
+
+            .content{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content:space-evenly;
+
+
+                h1{
+                    width: 100%;
+                    font-size: 18px;
+                    color: var(--dark);
+                    text-align: start;
+                }
+
+                p{
+                    font-size: 18px;
+                    color: var(--dark);
+                    padding-bottom: 15px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,104 @@
+.tip-card {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: .3%;
+    background: var(--transparent);
+    max-width: 650px;
+    width: 100%;
+    cursor: default;
+    height: fit-content;
+    position: relative; // required to position the tag absolutely inside
+    gap: 5px;
+    border-top: 1px solid var(--grey);
+    border-radius: 5px;
+
+    .top {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        .results {
+            span {
+                font-weight: 800;
+                &.won {
+                    color: var(--primary);
+                }
+                &.lost {
+                    color: var(--red);
+                }
+
+                &.pending {
+                    color: var(--primary-dark);
+                }
+            }
+        }
+        p{
+            width: fit-content;
+            font-size: 12px;
+            padding: 2px 2px;
+            z-index: 2;
+        }
+    }
+
+
+    .center {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: .5rem;
+
+        .teams {
+            display: flex;
+            //width: 100%;
+            flex: 1;
+            gap: 5px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            p {
+                width: 100%;
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+                flex: 1;
+                overflow: hidden;
+                /* Hide overflow content */
+                display: -webkit-box;
+                /* Use the flexbox model for a multi-line block */
+                -webkit-line-clamp: 2;
+                /* Show only 3 lines of text */
+                -webkit-box-orient: vertical;
+                /* Set the box to be vertical */
+                text-overflow: ellipsis;
+               /* Add these two lines 👇 */
+                word-break: break-word;
+                overflow-wrap: break-word;
+
+                &:first-child {
+                        text-align: end;
+                }
+
+                &.hidden {
+                        color: transparent;
+                        text-shadow: 0 0 5px rgba(0, 0, 0, .8)
+                }
+            }
+            .results {
+                width: 50px;
+                background: var(--primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--lite);
+                padding: 0;
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+.not-found{
+    width: inherit;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    background: linear-gradient(to bottom, var(--lite), var(--transparent),  var(--light-blue));
+    > h2{
+        color: var(--red);
+    }
+}

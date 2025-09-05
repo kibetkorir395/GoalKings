@@ -1,0 +1,100 @@
+.footer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    background: linear-gradient(to bottom, var(--lite), var(--transparent));
+    background: linear-gradient(to bottom, var(--light-blue), var(--lite));
+    background: linear-gradient(to bottom, var(--light-blue),var(--transparent), var(--lite));
+    position: relative;
+    margin-top: 20px;
+    .social{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        padding: 5px 0;
+        flex-wrap: wrap;
+
+        .wrapper{
+            min-width: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            a{
+                color: var(--dark);
+                cursor: pointer;
+                *{
+                    font-size: 24px;
+                }
+            }
+        }
+
+
+    }
+
+    .section-wrapper{
+        width: 100%;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        //flex-wrap: wrap;
+        gap: 10px;
+
+        section{
+            width: calc((100% - 30px) / 2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+
+            .items-container{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: space-evenly;
+
+                a{
+                    padding: 10px;
+                    cursor: pointer;
+                    text-decoration: none;
+                    color: var(--primary);
+                    &:hover{
+                        text-decoration: underline;
+                    }
+                    &:visited{
+                        color: var(--primary-dark);
+                    }
+
+                }
+            }
+        }
+    }
+
+    hr{
+        width: 80%;
+        color: var(--dark);
+        border-radius: 50%;
+        margin: 20px 0px;
+    }
+
+    .footer-bottom{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        @media screen and (max-width: 478px) {
+                flex-wrap: wrap;
+                gap: 10px;
+        }
+        a{
+            color: var(--dark);
+            font-size: 14px;
+            cursor: pointer;
+        }
+    }
+}

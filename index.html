@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<meta>
+<meta charset="UTF-8" />
+<link rel="icon" href="/favicon.ico" />
+<!--Include favicon links for multiple resolutions-->
+<link rel="icon" type="image/png" sizes="32x32" href="/logo32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/logo16.png" />
+
+<link rel="apple-touch-icon" href="/logo192.png" />
+<link rel="manifest" href="/manifest.json" crossorigin="anonymous" />
+<link rel="shortcut icon" type="image/x-icon" href="/logo512.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#1f4568">
+<meta name="background-color" content="#ebf4fc" />
+<meta name="description" content="Get expert football tips, accurate match predictions, live scores, and the latest betting odds. Stay updated with fixtures and results from top leagues worldwide" />
+<meta name="keywords" content="football tips, football predictions, live football scores, football betting odds, football results, football fixtures, football leagues, football betting, live football updates, soccer predictions, betting tips, live match scores, football match results, match schedules, football stats, football news, league standings, football competitions, soccer betting odds">
+				<meta name="author" content="Goal Kings">
+<link rel="canonical" href="/" />
+
+<!-- Open Graph -->
+				<meta property="og:title" content="Goal Kings" />
+<meta property="og:description" content="Get all the latest ✓Fixed VIP Tips ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions." />
+<meta property="og:image" content="/logo512.png" />
+				<meta property="og:url" content="https://goalkings.com/" />
+<meta property="og:type" content="website" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+				<meta name="twitter:title" content="Goal Kings" />
+<meta name="twitter:description" content="Get all the latest ✓Fixed VIP Tips ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions." />
+<meta name="twitter:image" content="/logo512.png" />
+
+<!-- iOS -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+				<meta name="apple-mobile-web-app-title" content="Goal Kings" />
+
+<!--Add icons for various Apple device sizes-->
+<link rel="apple-touch-icon" sizes="120x120" href="/logo120.png" />
+<link rel="apple-touch-icon" sizes="152x152" href="/logo152.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/logo180.png" />
+
+<!--Control how search engines index your page-->
+<meta name="robots" content="index, follow" />
+
+<!--If your site supports multiple languages, add alternate links-->
+				<link rel="alternate" href="https://goalkings.com/" hreflang="en" />
+
+<!--If your app uses custom web fonts-->
+<!--<link rel="preload" href="/fonts/custom-font.woff2" as="font" type="font/woff2" crossorigin="anonymous" />-->
+				<title>Goal Kings</title>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="module" src="/src/main.jsx"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(registration => {}).catch(error => {
+          console.error('Service Worker registration failed:', error);
+        });
+    }
+
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0A6847');
+    } else {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#059212');
+    }
+  </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16766305770">
+  </script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'AW-16766305770');
+  </script>
+</body>
+
+</html>

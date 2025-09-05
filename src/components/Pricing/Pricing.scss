@@ -1,0 +1,134 @@
+.pricing {
+    width: 100%;
+    position: relative;
+
+    .pricing-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        .plans-switch-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .plans-options {
+                min-width: 300px;
+                background: var(--primary-dark);
+                border-radius: 15px 15px 0 0;
+                display: flex;
+                gap: 10px;
+                padding: 6px;
+                align-items: center;
+                justify-content: space-evenly;
+
+                input[type="radio"] {
+                    display: none;
+                }
+
+                label {
+                    color: #fff;
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    cursor: pointer;
+                    transition: background 0.3s;
+
+                    &:hover {
+                        background: rgba(255, 255, 255, 0.1);
+                    }
+                }
+
+                label:has(input[type="radio"]:checked) {
+                    background: var(--green);
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+    .wrapper {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        gap: 10px;
+        //margin-top: 10px;
+
+        >div {
+            width: calc((100% - 100px)/ 3);
+            min-width: 300px;
+            height: inherit;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 10px 20px;
+            position: relative;
+            background: linear-gradient(to bottom, var(--lite), var(--light-blue));
+
+
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            border-radius: 0 0 15px 15px;
+
+            h1 {
+                color: var(--primary-dark);
+            }
+
+
+            h2 {
+                span {
+                    font-weight: bolder;
+                }
+            }
+
+            ul {
+                width: 100%;
+                list-style-type: circle;
+                //padding-left: 10px;
+                list-style-position: inside;
+                list-style-image: url('https://i.postimg.cc/R00sKW5z/bi-check-circle-fill.png');
+                line-height: 2em;
+            }
+
+            img.table-bg {
+                max-width: 100%;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                object-fit: contain;
+                object-position: center;
+            }
+
+            >.btn {
+                z-index: 2;
+                width: 100%;
+                //padding: 8px 60px;
+                //text-transform: uppercase;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 660px) {
+    .pricing-header {
+        display: flex;
+        flex-wrap: wrap;
+
+        h2 {
+            text-align: center;
+        }
+
+        .plans-switch-container {
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}

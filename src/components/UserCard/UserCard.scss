@@ -1,0 +1,210 @@
+.card {
+  width: 320px;
+  min-height: 200px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  position: relative;
+  text-decoration: none;
+  flex-wrap: wrap;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  }
+
+  @media screen and (max-width: 448px) {
+    & {
+      width: 100%;
+      border-radius: 10px;
+    }
+  }
+
+  .cover-bg {
+    height: 80px;
+    border-radius: 12px 12px 0 0;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%);
+    }
+  }
+
+  .user-info-wrap {
+    display: flex;
+    padding: 0 15px;
+    margin-top: -35px;
+    align-items: flex-start;
+
+    .user-photo {
+      height: 60px;
+      width: 60px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      object-fit: cover;
+      object-position: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+
+    .user-info {
+      padding-left: 15px;
+      padding-top: 8px;
+      flex-wrap: wrap;
+      flex: 1;
+
+      .user-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3748;
+        word-wrap: break-word;
+        word-break: break-word;
+        margin-bottom: 4px;
+        line-height: 1.3;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .user-title {
+        font-size: 14px;
+        font-weight: 400;
+        color: #718096;
+        margin-top: 2px;
+        text-overflow: ellipsis;
+        width: 100%;
+        word-wrap: break-word;
+        word-break: break-word;
+        line-height: 1.4;
+      }
+    }
+  }
+
+  .user-bio {
+    padding: 15px;
+    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(247, 250, 252, 0.6);
+    border-top: 1px solid rgba(226, 232, 240, 0.8);
+    margin-top: 10px;
+
+    > * {
+      font-size: 14px;
+      color: #4a5568;
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      word-wrap: break-word;
+      word-break: break-word;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    .data {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #667eea;
+      }
+    }
+
+    .mail {
+      font-size: 16px;
+      margin: 0;
+      color: #667eea;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  // Premium user indicator
+  &[data-premium="true"] {
+    border: 1px solid rgba(255, 215, 0, 0.3);
+
+    .cover-bg::before {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%);
+    }
+
+    .user-name {
+      background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+    }
+  }
+}
+
+// Responsive adjustments
+@media screen and (max-width: 448px) {
+  .card {
+    .user-info-wrap {
+      padding: 0 12px;
+
+      .user-info {
+        padding-left: 12px;
+
+        .user-name {
+          font-size: 16px;
+        }
+
+        .user-title {
+          font-size: 13px;
+        }
+      }
+    }
+
+    .user-bio {
+      padding: 12px;
+
+      > * {
+        font-size: 13px;
+      }
+
+      .mail {
+        font-size: 15px;
+      }
+    }
+  }
+}
+
+// Loading state enhancement for cards
+.card.loading {
+  animation: pulse 1.5s infinite;
+
+  @keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.6; }
+  }
+}
