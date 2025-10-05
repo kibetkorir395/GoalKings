@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+/*import { useLocation } from 'react-router-dom';
 import './Pay.scss';
 import { useEffect, useState } from 'react';
 import AppHelmet from '../AppHelmet';
@@ -25,9 +25,8 @@ const generateBasicAuthToken = () => {
   return `Basic ${encodedCredentials}`;
 };
 
-/**
- * Initiate PayHero payment (MPESA STK Push)
- */
+//Initiate PayHero payment (MPESA STK Push)
+ 
 const initiatePayHeroPayment = async (paymentData) => {
   try {
     const response = await fetch(`${PAYHERO_CONFIG.baseUrl}/payments`, {
@@ -242,7 +241,7 @@ export default function Subscription() {
       </div>
     </div>
   );
-}
+}*/
 /*import { useLocation } from 'react-router-dom';
 import './Pay.scss';
 import { useEffect, useState } from 'react';
@@ -504,7 +503,7 @@ export default function Subscription() {
   );
 }*/
 
-/*import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './Pay.scss';
 import { useEffect, useState } from 'react';
 import AppHelmet from '../AppHelmet';
@@ -582,4 +581,4 @@ export default function Subscription() {
       <PaystackButton {...componentProps} className='btn' />
     </div>
   )
-}*/
+}
