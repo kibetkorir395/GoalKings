@@ -16,7 +16,7 @@ const PAYHERO_CONFIG = {
   // Replace with your actual PayHero credentials
   apiUsername: 'gZNGpGEC2zoZfBnkRNsW',
   apiPassword: 'ZAawtbp3HCACqEVVBPexKy41MYybrK2nyr98xEEm',
-  channelId: 3123, // Your registered payment channel ID
+  channelId: 2216, // Your registered payment channel ID
 };
 
 // Generate Basic Auth token for PayHero
