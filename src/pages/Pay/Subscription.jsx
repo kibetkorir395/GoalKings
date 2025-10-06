@@ -503,7 +503,7 @@ export default function Subscription() {
   );
 }*/
 
-import { useLocation } from 'react-router-dom';
+/*import { useLocation } from 'react-router-dom';
 import './Pay.scss';
 import { useEffect, useState } from 'react';
 import AppHelmet from '../AppHelmet';
@@ -571,6 +571,200 @@ export default function Subscription() {
   return (
     <div className='pay'>
       <AppHelmet title={"Booking"} />
+      <ScrollToTop />
+      {
+        loading && <Loader />
+      }
+
+      {data && <h4>Payment Of KSH {data.price}</h4>}
+      {data && <h4>You Are About To Claim {data.plan} Plan.</h4>}
+      <PaystackButton {...componentProps} className='btn' />
+    </div>
+  )
+}
+*/
+
+import { useLocation } from 'react-router-dom';
+import './Pay.scss';
+import { useEffect, useState } from 'react';
+import AppHelmet from '../AppHelmet';
+import ScrollToTop from '../ScrollToTop';
+import Loader from '../../components/Loader/Loader';
+import { useNavigate } from 'react-router-dom';
+import { pricings } from '../../data';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { notificationState, subscriptionState, userState } from '../../recoil/atoms';
+import { PaystackButton } from 'react-paystack';
+import { getUser, updateUser } from '../../firebase';
+
+// Twitter Events Utility Functions (implemented directly in the file)
+const trackTwitterEvent = (eventId, parameters = {}) => {
+  if (typeof window !== 'undefined' && window.twq) {
+    window.twq('event', eventId, parameters);
+  } else {
+    console.warn('X Twitter pixel not loaded yet');
+    // Queue events if pixel hasn't loaded
+    if (typeof window !== 'undefined') {
+      window.twitterEventQueue = window.twitterEventQueue || [];
+      window.twitterEventQueue.push({ eventId, parameters });
+    }
+  }
+};
+
+const trackPurchase = (value, currency = 'KES', contents = []) => {
+  trackTwitterEvent('tw-ql57w-ql57x', {
+    value: value,
+    currency: currency,
+    contents: contents,
+    conversion_id: 'goal-kings-subscription'
+  });
+};
+
+// Twitter Pixel Queue Hook (implemented directly in the file)
+const useTwitterPixelQueue = () => {
+  useEffect(() => {
+    // Process any queued events once pixel is loaded
+    const processQueue = () => {
+      if (window.twitterEventQueue && window.twitterEventQueue.length > 0) {
+        window.twitterEventQueue.forEach(({ eventId, parameters }) => {
+          if (window.twq) {
+            window.twq('event', eventId, parameters);
+          }
+        });
+        window.twitterEventQueue = [];
+      }
+    };
+
+    // Check every 100ms if pixel is loaded
+    const interval = setInterval(() => {
+      if (window.twq) {
+        processQueue();
+        clearInterval(interval);
+      }
+    }, 100);
+
+    // Cleanup after 10 seconds
+    setTimeout(() => {
+      clearInterval(interval);
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+};
+
+export default function Subscription() {
+  const [user, setUser] = useRecoilState(userState);
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const [data, setData] = useState(null);
+  const setNotification = useSetRecoilState(notificationState);
+  const [subscription, setSubscription] = useRecoilState(subscriptionState);
+  const navigate = useNavigate();
+
+  // Initialize Twitter pixel queue
+  useTwitterPixelQueue();
+
+  useEffect(() => {
+    if (location.state) {
+      setData(location.state.subscription)
+      setSubscription(location.state.subscription)
+    } else {
+      setData(pricings[0])
+      setSubscription(pricings[0])
+    }
+  }, [location]);
+
+  const handleUpgrade = async () => {
+    const currentDate = new Date().toISOString();
+    await updateUser(user.email, true, {
+      subDate: currentDate,
+      billing: subscription.billing,
+      plan: subscription.plan,
+    }, setNotification).then(() => {
+      getUser(user.email, setUser);
+    }).then(() => {
+      // Track successful purchase conversion
+      trackPurchase(
+        data?.price || subscription.price,
+        'KES',
+        [
+          {
+            id: subscription.plan,
+            quantity: 1,
+            item_price: data?.price || subscription.price
+          }
+        ]
+      );
+      navigate("/", { replace: true });
+    });
+  };
+
+  const componentProps = {
+    reference: new Date().getTime().toString(),
+    email: user ? user.email : "coongames8@gmail.com",
+    amount: (data && data.price * 100) || subscription.price * 100,
+    publicKey: "pk_live_71bc9718fd9b78e12c120101e663c27d9fc7b1cf",
+    currency: "KES",
+    metadata: {
+      name: user ? user.email : "coongames8@gmail.com",
+      plan: data?.plan || subscription.plan,
+      billing: data?.billing || subscription.billing
+    },
+    text: "PAY NOW",
+    onSuccess: (response) => {
+      // Track payment success (before upgrade completion)
+      trackTwitterEvent('tw-ql57w-ql57x', {
+        value: data?.price || subscription.price,
+        currency: 'KES',
+        contents: [
+          {
+            id: subscription.plan,
+            quantity: 1,
+            item_price: data?.price || subscription.price
+          }
+        ],
+        payment_status: 'successful'
+      });
+      handleUpgrade();
+    },
+    onClose: () => {
+      // Track when user closes payment dialog without completing
+      trackTwitterEvent('tw-ql57w-ql57x', {
+        value: data?.price || subscription.price,
+        currency: 'KES',
+        contents: [
+          {
+            id: subscription.plan,
+            quantity: 1,
+            item_price: data?.price || subscription.price
+          }
+        ],
+        payment_status: 'cancelled'
+      });
+    },
+  };
+
+  // Track when user lands on subscription page (page view for conversion funnel)
+  useEffect(() => {
+    if (data) {
+      trackTwitterEvent('tw-ql57w-ql57x', {
+        value: data.price,
+        currency: 'KES',
+        contents: [
+          {
+            id: data.plan,
+            quantity: 1,
+            item_price: data.price
+          }
+        ],
+        event_type: 'subscription_page_view'
+      });
+    }
+  }, [data]);
+
+  return (
+    <div className='pay'>
+      <AppHelmet title={"Subscription Payment"} />
       <ScrollToTop />
       {
         loading && <Loader />
