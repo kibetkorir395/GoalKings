@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import './Pay.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import AppHelmet from '../AppHelmet';
 import ScrollToTop from '../ScrollToTop';
 import Loader from '../../components/Loader/Loader';
@@ -67,12 +67,15 @@ export default function PesapalSubscription() {
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [polling, setPolling] = useState(false);
+  const [pollingNotification, setPollingNotification] = useState(null);
   const [orderTrackingId, setOrderTrackingId] = useState(null);
   const location = useLocation();
   const [data, setData] = useState(null);
   const setNotification = useSetRecoilState(notificationState);
   const [subscription, setSubscription] = useRecoilState(subscriptionState);
   const navigate = useNavigate();
+  const pollIntervalRef = useRef(null);
+  const pollingTimeoutRef = useRef(null);
 
   // Initialize Twitter pixel queue
   useTwitterPixelQueue();
@@ -132,6 +135,8 @@ export default function PesapalSubscription() {
           confirmButton: 'swal-custom-confirm-success'
         }
       }).then(() => {
+        // Clear any pending polling states
+        clearPolling();
         navigate("/", { replace: true });
       });
     }).catch((error) => {
@@ -148,6 +153,56 @@ export default function PesapalSubscription() {
         }
       });
     });
+  };
+
+  // Clear all polling related states and intervals
+  const clearPolling = () => {
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+      pollIntervalRef.current = null;
+    }
+    if (pollingTimeoutRef.current) {
+      clearTimeout(pollingTimeoutRef.current);
+      pollingTimeoutRef.current = null;
+    }
+    setPolling(false);
+    setPollingNotification(null);
+    setOrderTrackingId(null);
+  };
+
+  // Show persistent notification for polling status
+  const showPollingNotification = (message, type = 'info') => {
+    // Close existing notification
+    if (pollingNotification) {
+      pollingNotification.close();
+    }
+
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: null,
+      timerProgressBar: false,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      }
+    });
+
+    const notification = Toast.fire({
+      icon: type,
+      title: message,
+      timer: undefined,
+      showConfirmButton: type === 'error' || type === 'warning',
+      confirmButtonText: 'Reset',
+      showCloseButton: true,
+      customClass: {
+        popup: 'polling-toast'
+      }
+    });
+
+    setPollingNotification(notification);
+    return notification;
   };
 
   // Function to check payment status
@@ -186,11 +241,13 @@ export default function PesapalSubscription() {
       // FAILED - Payment failed
       else if (status === 'FAILED' || statusCode === 2) {
         stopPolling();
+        showPollingNotification('Payment failed. Please try again.', 'error');
         return { completed: false, status: 'failed' };
       }
       // REVERSED - Payment was reversed
       else if (status === 'REVERSED' || statusCode === 3) {
         stopPolling();
+        showPollingNotification('Payment was reversed. Please contact support.', 'warning');
         return { completed: false, status: 'reversed' };
       }
       // INVALID - Payment not yet processed
@@ -206,9 +263,12 @@ export default function PesapalSubscription() {
 
   // Function to open the payment modal
   const openPaymentModal = (paymentUrl, trackingId) => {
-    let pollInterval;
     let pollCount = 0;
     const MAX_POLLS = 60;
+    let isModalClosed = false;
+    
+    // Show initial polling notification
+    showPollingNotification('Waiting for payment confirmation...', 'info');
     
     Swal.fire({
       title: 'Complete Your Payment',
@@ -222,6 +282,9 @@ export default function PesapalSubscription() {
             allow="payment *;"
           ></iframe>
         </div>
+        <div class="payment-status" style="margin-top: 10px; text-align: center; font-size: 12px; color: #666;">
+          Complete payment in the window above. This will close automatically when payment is confirmed.
+        </div>
       `,
       showConfirmButton: false,
       showCloseButton: true,
@@ -231,69 +294,73 @@ export default function PesapalSubscription() {
       },
       didOpen: () => {
         // Start polling after 15 seconds
-        setTimeout(() => {
+        pollingTimeoutRef.current = setTimeout(() => {
+          if (isModalClosed) return;
+          
           setPolling(true);
           
-          pollInterval = setInterval(async () => {
+          pollIntervalRef.current = setInterval(async () => {
+            if (isModalClosed) return;
+            
             pollCount++;
             console.log(`Polling payment status (${pollCount}/${MAX_POLLS}) for:`, trackingId);
+            
+            // Update notification with progress
+            if (pollCount % 6 === 0) { // Update every 30 seconds
+              showPollingNotification(`Still verifying payment (${Math.floor(pollCount * 5 / 60)} min)...`, 'info');
+            }
             
             try {
               const result = await checkPaymentStatus(
                 trackingId, 
                 handleUpgrade, 
                 () => {
-                  clearInterval(pollInterval);
-                  setPolling(false);
+                  isModalClosed = true;
+                  clearPolling();
                   Swal.close();
                 }
               );
               
               if (result.completed && result.status === 'success') {
-                clearInterval(pollInterval);
-                setPolling(false);
+                isModalClosed = true;
+                clearPolling();
                 Swal.close();
               } else if (result.status === 'failed' || result.status === 'reversed') {
-                clearInterval(pollInterval);
-                setPolling(false);
+                isModalClosed = true;
+                clearPolling();
                 Swal.close();
-                
-                setTimeout(async () => {
-                  await Swal.fire({
-                    icon: 'error',
-                    title: 'Payment Failed',
-                    text: 'Your payment could not be processed. Please try again.',
-                    confirmButtonColor: '#d33',
-                    confirmButtonText: 'Try Again',
-                    customClass: {
-                      popup: 'swal-custom-popup',
-                      title: 'swal-custom-title',
-                      htmlContainer: 'swal-custom-html',
-                      confirmButton: 'swal-custom-confirm'
-                    }
-                  });
-                }, 300);
               }
               
-              if (pollCount >= MAX_POLLS) {
-                clearInterval(pollInterval);
-                setPolling(false);
+              if (pollCount >= MAX_POLLS && !isModalClosed) {
+                isModalClosed = true;
+                clearPolling();
                 Swal.close();
                 
                 setTimeout(async () => {
-                  await Swal.fire({
+                  const result = await Swal.fire({
                     icon: 'warning',
                     title: 'Payment Status Timeout',
                     html: `
                       <div style="text-align: center;">
+                        <p>We're still waiting for payment confirmation.</p>
                         <p>Please check your email for payment receipt.</p>
-                        <button onclick="window.location.reload()" style="background: #3085d6; color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer;">
-                          Refresh Page
+                        <button id="check-status-btn" style="background: #4CAF50; color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; margin-top: 10px;">
+                          Check Status Again
                         </button>
                       </div>
                     `,
                     showConfirmButton: false,
-                    showCloseButton: true
+                    showCloseButton: true,
+                    didOpen: () => {
+                      const checkBtn = document.getElementById('check-status-btn');
+                      if (checkBtn) {
+                        checkBtn.onclick = async () => {
+                          Swal.close();
+                          // Allow user to manually check status
+                          await checkPaymentStatusManually(trackingId);
+                        };
+                      }
+                    }
                   });
                 }, 300);
               }
@@ -304,16 +371,99 @@ export default function PesapalSubscription() {
         }, 15000);
       },
       willClose: () => {
-        if (pollInterval) {
-          clearInterval(pollInterval);
-          setPolling(false);
+        isModalClosed = true;
+        
+        // If modal is closed but we're still polling, ask if they want to keep checking
+        if (pollIntervalRef.current && !pollingNotification?.isDismissed) {
+          Swal.fire({
+            icon: 'question',
+            title: 'Payment Still Processing?',
+            text: 'Your payment might still be processing. Do you want to continue checking the status?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, keep checking',
+            cancelButtonText: 'No, cancel',
+            confirmButtonColor: '#4CAF50',
+            cancelButtonColor: '#d33'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Keep polling in background
+              showPollingNotification('Continuing to check payment status...', 'info');
+            } else {
+              // Cancel polling and reset button state
+              clearPolling();
+              setProcessing(false);
+              setPolling(false);
+              
+              // Reset button state
+              Swal.fire({
+                icon: 'info',
+                title: 'Payment Cancelled',
+                text: 'You can try again whenever you\'re ready.',
+                confirmButtonText: 'OK',
+                timer: 3000
+              });
+            }
+          });
+        }
+        
+        // Clean up
+        if (pollIntervalRef.current) {
+          clearInterval(pollIntervalRef.current);
+          pollIntervalRef.current = null;
+        }
+        if (pollingTimeoutRef.current) {
+          clearTimeout(pollingTimeoutRef.current);
+          pollingTimeoutRef.current = null;
         }
       }
     });
   };
 
+  // Manual status check function
+  const checkPaymentStatusManually = async (trackingId) => {
+    Swal.fire({
+      title: 'Checking Payment Status',
+      text: 'Please wait...',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    const result = await checkPaymentStatus(trackingId, handleUpgrade, clearPolling);
+    
+    Swal.close();
+    
+    if (result.completed && result.status === 'success') {
+      // Success already handled in checkPaymentStatus
+    } else if (result.status === 'failed') {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Payment Failed',
+        text: 'Your payment was not successful. Please try again.',
+        confirmButtonText: 'Try Again',
+        confirmButtonColor: '#4CAF50'
+      });
+      clearPolling();
+      setProcessing(false);
+    } else if (result.status === 'pending') {
+      await Swal.fire({
+        icon: 'info',
+        title: 'Still Processing',
+        text: 'Your payment is still being processed. Please check your email for updates or try again later.',
+        confirmButtonText: 'OK'
+      });
+    }
+  };
+
   // Function to handle payment
   const handlePayment = async () => {
+    // Reset any previous polling states
+    clearPolling();
+    setProcessing(false);
+    setPolling(false);
+    
     if (!user) {
       await Swal.fire({
         icon: 'warning',
@@ -358,7 +508,7 @@ export default function PesapalSubscription() {
       countryCode: "KE",
       currency: "KES",
       url: window.location.origin + window.location.pathname,
-      callbackUrl: window.location.origin + '/payment-callback',
+      callbackUrl: window.location.origin, //+ '/payment-callback',
       consumerKey: "nbZBtDnSEt9X+l0cHNDFren+7dTQIJXl",
       consumerSecret: "3p2NhatNMO64hzQpqGUs062LTvE="
     };
@@ -414,6 +564,7 @@ export default function PesapalSubscription() {
       
     } catch (err) {
       setProcessing(false);
+      clearPolling();
       await Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -451,6 +602,7 @@ export default function PesapalSubscription() {
       
       checkPaymentStatus(trackingId, handleUpgrade, () => {
         setProcessing(false);
+        clearPolling();
         Swal.close();
       });
     }
@@ -473,6 +625,13 @@ export default function PesapalSubscription() {
       });
     }
   }, [data]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      clearPolling();
+    };
+  }, []);
 
   return (
     <div className='pay'>
@@ -498,7 +657,7 @@ export default function PesapalSubscription() {
         ) : polling ? (
           <span><i className="fas fa-clock"></i> CHECKING PAYMENT...</span>
         ) : (
-          <span><i className="fas fa-lock"></i> PAY NOW WITH PESAPAL</span>
+          <span><i className="fas fa-lock"></i> PAY NOW </span>
         )}
       </button>
     </div>
@@ -512,6 +671,25 @@ const additionalStyles = `
   height: 600px !important;
   max-width: 900px !important;
   padding: 0 !important;
+}
+
+/* Toast notification for polling */
+.polling-toast {
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  animation: slideInRight 0.3s ease-out !important;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .swal-custom-popup {
@@ -620,6 +798,18 @@ const additionalStyles = `
 .swal2-popup.payment-modal-popup .swal2-title {
   padding: 1rem !important;
   margin: 0 !important;
+}
+
+.payment-status {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Loading spinner for button */
+.fa-spinner {
+  animation: spin 1s linear infinite;
 }
 `;
 
