@@ -32,7 +32,7 @@ export const pricings = [
 		],
 		color: "#00A36C",
 	},
-	{
+	/*{
 		id: "3",
 		plan: "Monthly",
 		billing: "Month",
@@ -44,7 +44,7 @@ export const pricings = [
 			"Your 30 Day winning streak starts here!",
 		],
 		color: "#0A6847",
-	},
+	},*/
 ];
 
 export const faqs = [
