@@ -1,16 +1,16 @@
-.Home{
-    display: flex;
-    width: 100%;
-    overflow: hidden;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+.Home {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  padding: 0 12px;
+  gap: 16px;
 
-    .post-container{
-        gap: 5px;
-        > *{
-            margin: 5px;
-        }
-    }
+  @media (max-width: 480px) {
+    padding: 0 6px;
+    gap: 12px;
+  }
 }

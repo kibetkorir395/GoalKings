@@ -1,159 +1,69 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react';
 import './HomeBg.scss';
 
-export default function HomeBg({opacity}) {
+export default function HomeBg({ opacity = 0.15 }) {
+  const canvasRef = useRef(null);
 
-    const canvasRef = useRef();
-    useEffect(() => {
-        const canvas = canvasRef.current//document.querySelector('canvas')
-        const cx = canvas.getContext('2d')
-        
-        const Interpolation = (() => {
-          function linear(x, a, b) {
-            return (1 - x) * a + x * b
-          }
-          
-          function quadratic(x, a, b, c) {
-            return linear(x, linear(x, a, b), linear(x, b, c))  
-          }
-          
-          function cubic(x, a, b, c, d) {
-            return linear(x, quadratic(x, a, b, c), quadratic(x, b, c, d))    
-          }
-          
-          return {
-            linear,
-            quadratic,
-            cubic
-          }
-        })()
-        
-        const Random = ((fn) => {
-          const from = function(a, b) {
-            return Interpolation.linear(fn(), a, b)
-          }
-          
-          return {
-            from
-          }  
-        })(Math.random)
-        
-        class Point {
-          constructor(x = 0, y = 0) {
-            this.x = x || 0
-            this.y = y || 0
-          }
-          
-          set(x, y) {
-            this.x = x
-            this.y = y
-            return this
-          }
-          
-          copy({ x, y }) {
-            return this.set(x, y)
-          }
-          
-          clone() {
-            return new Point(this.x, this.y)
-          }
-          
-          scale(s) {
-            return this.set(this.x * s, this.y * s)
-          }
-          
-          floor() {
-            return this.set(
-              Math.floor(this.x),
-              Math.floor(this.y)
-            )
-          }
-        }
-        
-        const positions = Array.from(new Array(8192), () => {
-          return new Point(
-            Random.from(-128, 128),
-            Random.from(-256, 256)
-          )
-        })
-        
-        const attractor = { a: 1.7, b: 1.7, c: 0.6, d: 1.2 }
-        function updateAttractor({ a, b, c, d }, { x, y }, out = new  Point()) {
-          return out.set(
-            Math.sin(a * y) + c * Math.cos(a * x),
-            Math.sin(b * x) + d * Math.cos(b * y)
-          )
-        }
-        
-        function resize(
-          canvas, 
-          width = Math.floor(canvas.clientWidth * window.devicePixelRatio), 
-          height = Math.floor(canvas.clientHeight * window.devicePixelRatio),
-        ) {
-          let resized = false
-          if (canvas.width !== width) {
-            canvas.width = width
-            resized = true
-          }
-          if (canvas.height !== height) {
-            canvas.height = height
-            resized = true
-          }
-          return resized
-        }
-        
-        function update(time) {
-          const nextPosition = new Point()
-          
-          attractor.a = Interpolation.linear(Math.sin(time / 1000), 1.7, 1.5)
-          attractor.b = Interpolation.linear(Math.cos(time / 1000), 1.5, 1.7)
-          attractor.c = Interpolation.linear(Math.sin(time / 1000), 0.6, 0.7)
-          attractor.d = Interpolation.linear(Math.cos(time / 1000), 1.2, 1.3)
-          
-          for (const position of positions) {
-            updateAttractor(attractor, position, nextPosition)
-            position.copy(nextPosition)
-          }
-        }
-        
-        let iteration = 0
-        function render(time) {
-          //cx.clearRect(0, 0, cx.canvas.width, cx.canvas.height)
-          if (iteration % 25 === 0) {
-            cx.globalCompositeOperation = 'source-over'
-            cx.fillStyle = 'hsla(240, 100%, 2%, 0.3)'
-            cx.fillRect(0, 0, cx.canvas.width, cx.canvas.height)
-          }
-          iteration++
-          
-          cx.globalCompositeOperation = 'screen'
-          cx.fillStyle = 'hsla(220, 90%, 50%)'
-          cx.save()
-          cx.scale(window.devicePixelRatio, window.devicePixelRatio)
-          cx.translate(cx.canvas.width / 2, cx.canvas.height / 2)
-          
-          for (const position of positions) {
-            cx.fillRect(position.x * 256, position.y * 256, 1, 1)
-          }
-          
-          cx.restore()
-        }
-        
-        let frameId = null
-        function onFrame(time) {
-          resize(canvas)
-          update(time)
-          render(time)
-          frameId = requestAnimationFrame(onFrame)
-        }
-        
-        async function start() {
-          frameId = requestAnimationFrame(onFrame) 
-        }
-        
-        start()
-    }, []);
-  return (
-    <canvas ref={canvasRef} style={{opacity: opacity}}></canvas>
-  )
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const cx = canvas.getContext('2d');
+
+    let frameId = null;
+    let w = 0, h = 0;
+
+    const resize = () => {
+      const rect = canvas.parentElement?.getBoundingClientRect();
+      const nw = rect ? Math.floor(rect.width * window.devicePixelRatio) : window.innerWidth;
+      const nh = rect ? Math.floor(rect.height * window.devicePixelRatio) : window.innerHeight;
+      if (w !== nw || h !== nh) {
+        canvas.width = nw;
+        canvas.height = nh;
+        w = nw; h = nh;
+      }
+    };
+
+    const N = 512;
+    const points = Array.from({ length: N }, () => ({
+      x: (Math.random() - 0.5) * 2,
+      y: (Math.random() - 0.5) * 2,
+    }));
+
+    let a = 1.7, b = 1.7, c = 0.6, d = 1.2;
+
+    function step(time) {
+      resize();
+      a = 1.7 + Math.sin(time * 0.0003) * 0.2;
+      b = 1.7 + Math.cos(time * 0.0003) * 0.2;
+
+      for (const p of points) {
+        const x = Math.sin(a * p.y) + c * Math.cos(a * p.x);
+        const y = Math.sin(b * p.x) + d * Math.cos(b * p.y);
+        p.x = x;
+        p.y = y;
+      }
+
+      cx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+      cx.fillRect(0, 0, w, h);
+      cx.fillStyle = 'rgba(5, 146, 18, 0.3)';
+      cx.save();
+      cx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      const cw = canvas.clientWidth;
+      const ch = canvas.clientHeight;
+      cx.translate(cw / 2, ch / 2);
+      for (const p of points) {
+        cx.fillRect(p.x * Math.min(cw, ch) * 0.45, p.y * Math.min(cw, ch) * 0.45, 1, 1);
+      }
+      cx.restore();
+
+      frameId = requestAnimationFrame(step);
+    }
+
+    frameId = requestAnimationFrame(step);
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} style={{ opacity, position: 'absolute', inset: 0, zIndex: -1, pointerEvents: 'none' }} />;
 }

@@ -1,134 +1,163 @@
 .pricing {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+
+  .pricing-header {
     width: 100%;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    .pricing-header {
+    .plans-switch-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      .plans-options {
+        background: var(--primary-dark);
+        border-radius: 10px;
         display: flex;
+        gap: 4px;
+        padding: 4px;
         align-items: center;
-        justify-content: center;
-        width: 100%;
 
-        .plans-switch-container {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            .plans-options {
-                min-width: 300px;
-                background: var(--primary-dark);
-                border-radius: 15px 15px 0 0;
-                display: flex;
-                gap: 10px;
-                padding: 6px;
-                align-items: center;
-                justify-content: space-evenly;
-
-                input[type="radio"] {
-                    display: none;
-                }
-
-                label {
-                    color: #fff;
-                    padding: 8px 16px;
-                    border-radius: 20px;
-                    cursor: pointer;
-                    transition: background 0.3s;
-
-                    &:hover {
-                        background: rgba(255, 255, 255, 0.1);
-                    }
-                }
-
-                label:has(input[type="radio"]:checked) {
-                    background: var(--green);
-                    font-weight: bold;
-                }
-            }
+        input[type="radio"] {
+          display: none;
         }
-    }
 
-    .wrapper {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        flex-wrap: wrap;
-        gap: 10px;
-        //margin-top: 10px;
+        label {
+          color: #fff;
+          padding: 8px 18px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          font-size: 13px;
+          font-weight: 500;
 
-        >div {
-            width: calc((100% - 100px)/ 3);
-            min-width: 300px;
-            height: inherit;
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 10px 20px;
-            position: relative;
-            background: linear-gradient(to bottom, var(--lite), var(--light-blue));
-
-
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            border-radius: 0 0 15px 15px;
-
-            h1 {
-                color: var(--primary-dark);
-            }
-
-
-            h2 {
-                span {
-                    font-weight: bolder;
-                }
-            }
-
-            ul {
-                width: 100%;
-                list-style-type: circle;
-                //padding-left: 10px;
-                list-style-position: inside;
-                list-style-image: url('https://i.postimg.cc/R00sKW5z/bi-check-circle-fill.png');
-                line-height: 2em;
-            }
-
-            img.table-bg {
-                max-width: 100%;
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                width: 100%;
-                object-fit: contain;
-                object-position: center;
-            }
-
-            >.btn {
-                z-index: 2;
-                width: 100%;
-                //padding: 8px 60px;
-                //text-transform: uppercase;
-            }
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+          }
         }
+
+        label:has(input[type="radio"]:checked) {
+          background: var(--green);
+          font-weight: 600;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+      }
     }
+  }
+
+  .wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    > div {
+      width: 100%;
+      max-width: 320px;
+      min-height: 280px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 16px 20px;
+      background: var(--lite);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--dark-shadow);
+      }
+
+      h2 {
+        font-size: 22px;
+        color: var(--dark);
+
+        span {
+          font-weight: 700;
+        }
+      }
+
+      p {
+        font-size: 13px;
+        color: var(--grey);
+        text-align: center;
+        margin: 4px 0;
+      }
+
+      h3 {
+        font-size: 14px;
+        margin: 8px 0 4px;
+      }
+
+      ul {
+        width: 100%;
+        list-style: none;
+        padding: 0;
+        margin: 8px 0;
+        flex: 1;
+
+        li {
+          font-size: 13px;
+          padding: 4px 0;
+          color: var(--dark-grey);
+          display: flex;
+          align-items: center;
+          gap: 6px;
+
+          &::before {
+            content: "\2713";
+            color: var(--green);
+            font-weight: 700;
+            font-size: 12px;
+          }
+        }
+      }
+
+      img.table-bg {
+        display: none;
+      }
+
+      > .btn {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 8px;
+      }
+    }
+  }
 }
 
-@media screen and (max-width: 660px) {
+@media (max-width: 660px) {
+  .pricing {
     .pricing-header {
-        display: flex;
-        flex-wrap: wrap;
-
-        h2 {
-            text-align: center;
+      .plans-options {
+        label {
+          padding: 6px 12px;
+          font-size: 12px;
         }
-
-        .plans-switch-container {
-            align-items: center;
-            justify-content: center;
-        }
+      }
     }
+
+    .wrapper > div {
+      max-width: 100%;
+      min-height: 240px;
+    }
+  }
 }

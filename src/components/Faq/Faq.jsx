@@ -10,7 +10,7 @@ export default function Faq() {
   };
 
   return (
-    <div className="container" id='faq'>
+    <div className="faq-container" id='faq'>
       <h1>FAQ's</h1>
       <h2>People ask for:</h2>
       <div className="accordion">

@@ -1,104 +1,157 @@
 .tip-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--lite);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 100%;
+  transition: all 0.2s ease;
+  cursor: default;
+
+  &:hover {
+    box-shadow: var(--dark-shadow);
+    transform: translateY(-1px);
+  }
+
+  &.vip {
+    border-left: 3px solid #c9a227;
+  }
+
+  &.free {
+    border-left: 3px solid #c0c0c0;
+  }
+
+  .tip-header {
     display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: .3%;
-    background: var(--transparent);
-    max-width: 650px;
-    width: 100%;
-    cursor: default;
-    height: fit-content;
-    position: relative; // required to position the tag absolutely inside
-    gap: 5px;
-    border-top: 1px solid var(--grey);
-    border-radius: 5px;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-height: 24px;
 
-    .top {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        .results {
-            span {
-                font-weight: 800;
-                &.won {
-                    color: var(--primary);
-                }
-                &.lost {
-                    color: var(--red);
-                }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 3px;
 
-                &.pending {
-                    color: var(--primary-dark);
-                }
-            }
+      &.time {
+        background: #f0f0f0;
+        color: #666;
+      }
+
+      &.status {
+        .won {
+          color: var(--green);
         }
-        p{
-            width: fit-content;
-            font-size: 12px;
-            padding: 2px 2px;
-            z-index: 2;
+        .lost {
+          color: var(--red);
         }
+        .pending {
+          color: var(--primary-dark);
+        }
+      }
+
+      &.odd {
+        background: var(--primary);
+        color: var(--lite);
+      }
     }
 
+    .edit-btn {
+      color: var(--grey);
+      font-size: 14px;
+      padding: 2px;
+      transition: color 0.2s;
 
-    .center {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        gap: .5rem;
-
-        .teams {
-            display: flex;
-            //width: 100%;
-            flex: 1;
-            gap: 5px;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            p {
-                width: 100%;
-                flex: 1;
-                display: flex;
-                align-items: center;
-                justify-content: space-around;
-                flex: 1;
-                overflow: hidden;
-                /* Hide overflow content */
-                display: -webkit-box;
-                /* Use the flexbox model for a multi-line block */
-                -webkit-line-clamp: 2;
-                /* Show only 3 lines of text */
-                -webkit-box-orient: vertical;
-                /* Set the box to be vertical */
-                text-overflow: ellipsis;
-               /* Add these two lines 👇 */
-                word-break: break-word;
-                overflow-wrap: break-word;
-
-                &:first-child {
-                        text-align: end;
-                }
-
-                &.hidden {
-                        color: transparent;
-                        text-shadow: 0 0 5px rgba(0, 0, 0, .8)
-                }
-            }
-            .results {
-                width: 50px;
-                background: var(--primary);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: var(--lite);
-                padding: 0;
-            }
-        }
+      &:hover {
+        color: var(--primary-dark);
+      }
     }
+  }
+
+  .tip-body {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+
+    .team {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 1.4;
+
+      &.home {
+        text-align: right;
+      }
+
+      &.away {
+        text-align: left;
+      }
+
+      &.hidden {
+        color: transparent;
+        text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+      }
+    }
+
+    .pick {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      padding: 4px 10px;
+      background: var(--primary);
+      color: var(--lite);
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 6px;
+      text-align: center;
+      white-space: nowrap;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .tip-card {
+    padding: 8px 10px;
+    gap: 6px;
+
+    .tip-header {
+      gap: 4px;
+
+      .badge {
+        font-size: 10px;
+        padding: 2px 6px;
+      }
+    }
+
+    .tip-body {
+      gap: 6px;
+      min-height: 28px;
+
+      .team {
+        font-size: 12px;
+      }
+
+      .pick {
+        min-width: 40px;
+        padding: 3px 6px;
+        font-size: 11px;
+      }
+    }
+  }
 }
