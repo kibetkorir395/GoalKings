@@ -80,59 +80,56 @@ export default function EditTip() {
 
     return (
         <div className='admin-tips'>
-            <AppHelmet title={"Edit Tip"} />
-            <ScrollToTop />
+        <AppHelmet title={"Edit Tip"} />
+        <ScrollToTop />
+        <div className="admin-card">
             <h1>Update Tip</h1>
-            {!loading && <form onSubmit={handleSubmit}>
-                <div className="input-container vertical">
+            {!loading && (
+            <form onSubmit={handleSubmit}>
+                <div className="form-group">
                     <label htmlFor="home">Home Team</label>
-                    <input type="text" placeholder='home' id='home' value={home} onChange={(e) => setHome(e.target.value)} required />
+                    <input type="text" placeholder='e.g. Manchester United' id='home' value={home} onChange={(e) => setHome(e.target.value)} required />
                 </div>
-                <div className="input-container vertical">
+                <div className="form-group">
                     <label htmlFor="away">Away Team</label>
-                    <input type="text" placeholder='away' id='away' value={away} onChange={(e) => setAway(e.target.value)} required />
+                    <input type="text" placeholder='e.g. Liverpool' id='away' value={away} onChange={(e) => setAway(e.target.value)} required />
                 </div>
-                <div className="input-container">
+                <div className="form-group">
                     <label htmlFor="odds">Odds</label>
-                    <input type="text" placeholder='odds' id='odds' value={odd} onChange={(e) => setOdd(e.target.value)} required />
+                    <input type="text" placeholder='e.g. 1.5' id='odds' value={odd} onChange={(e) => setOdd(e.target.value)} required />
                 </div>
-                <div className="input-container">
+                <div className="form-group">
                     <label htmlFor="pick">Pick</label>
-                    <input type="text" placeholder='pick' id='pick' value={pick} onChange={(e) => setPick(e.target.value)} required />
+                    <input type="text" placeholder='e.g. Home Win' id='pick' value={pick} onChange={(e) => setPick(e.target.value)} required />
                 </div>
-                <div className="input-container">
-                    <label htmlFor="status">Status: </label>
-                    <input type="text" placeholder='Finish/Pending/Live' id='status' value={status} onChange={(e) => setStatus(e.target.value)} required />
+                <div className="form-group">
+                    <label htmlFor="status">Status</label>
+                    <input type="text" placeholder='Finish / Pending / Live' id='status' value={status} onChange={(e) => setStatus(e.target.value)} required />
                 </div>
-                <div className="input-container">
-                    <label htmlFor="time">Date/Time: </label>
+                <div className="form-group">
+                    <label htmlFor="time">Date / Time</label>
                     <input type="datetime-local" id='time' value={time} onChange={(e) => setTime(e.target.value)} required />
                 </div>
-                <div className="input-container">
+                <div className="form-group">
                     <label htmlFor="results">Results</label>
-                    <input type="text" placeholder='results' id='results' value={results} onChange={(e) => setResults(e.target.value)} />
+                    <input type="text" placeholder='e.g. 2-1' id='results' value={results} onChange={(e) => setResults(e.target.value)} />
                 </div>
-                <div className="input-container">
-                    <label htmlFor="won">Is won</label>
-                    <input type="text" placeholder='won/pending/lost' id='won' value={won} onChange={(e) => setWon(e.target.value)} required />
+                <div className="form-group">
+                    <label htmlFor="won">Is Won</label>
+                    <input type="text" placeholder='won / pending / lost' id='won' value={won} onChange={(e) => setWon(e.target.value)} required />
                 </div>
-                <div className="input-container">
-                    <label htmlFor="premium">Is premium</label>
-                    <input type="checkbox" placeholder='premium' id='premium' onChange={(e) => setPremium(e.target.checked)} checked={premium} />
+                <div className="form-group checkbox">
+                    <input type="checkbox" id='premium' onChange={(e) => setPremium(e.target.checked)} checked={premium} />
+                    <label htmlFor="premium">Is VIP</label>
                 </div>
-                <span style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "items",
-                    justifyContent: "space-evenly"
-                }}>
-                    <button type="submit" className='btn' title='Submit' aria-label="add">Update</button>
-                    <span className="btn" onClick={() => window.history.back()}>DONE</span>
-                </span>
-            </form>}
-            {
-                loading && <Loader />
-            }
+                <div className="form-actions">
+                    <button type="submit" className='btn btn-primary' aria-label="update">Update</button>
+                    <span className="btn btn-secondary" onClick={() => window.history.back()}>Done</span>
+                </div>
+            </form>
+            )}
+            {loading && <Loader />}
         </div>
+    </div>
     )
 }

@@ -106,46 +106,41 @@ export default function EditUser() {
     <div className='admin-tips'>
         <AppHelmet title={"Edit User"}/>
         <ScrollToTop />
+        <div className="admin-card">
         <h1>Update User</h1>
         {loading && <Loader />}
         {!loading && <form onSubmit={handleSubmit}>
-            <div className="input-container">
-                <label htmlFor="username">Username: </label>
+            <div className="form-group">
+                <label htmlFor="username">Username</label>
                 <input type="text" placeholder='@someone' id='username' value={username} onChange={(e) => setUsername(e.target.value)}/>
             </div>
-            <div className="input-container">
-                <label htmlFor="email">Email:</label>
+            <div className="form-group">
+                <label htmlFor="email">Email</label>
                 <input type="text" placeholder='example@gmail.com' id='email' value={email} onChange={(e) => setEmail(e.target.value)} readOnly/>
             </div>
-
-            {<div className="input-container">
-                <label htmlFor="subDate">Subscribed On: </label>
+            <div className="form-group">
+                <label htmlFor="subDate">Subscribed On</label>
                 <input type="datetime-local" id='subDate' value={subDate} onChange={(e) => setSubDate(e.target.value)}/>
-            </div>}
-            <div className="input-container">
-                <label htmlFor="premium">Is premium</label>
-                <input type="checkbox" placeholder='premium' id='premium' onChange={(e) => setIsPremium(e.target.checked)} checked={isPremium}/>
-              </div>
-            <div className="input-container">
+            </div>
+            <div className="form-group checkbox">
+                <input type="checkbox" id='premium' onChange={(e) => setIsPremium(e.target.checked)} checked={isPremium}/>
+                <label htmlFor="premium">Is Premium</label>
+            </div>
+            <div className="form-group">
                 <label htmlFor="plan">Plan</label>
                 <Dropdown
                     options={planOptions}
                     value={selectedPlan}
                     onChange={setSelectedPlan}
-                    placeholder="Want to update plan?"
+                    placeholder="Select a plan"
                 />
             </div>
-
-            <span style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "items",
-                justifyContent: "space-evenly"
-            }}>
-                <button type="submit" className='btn' title='Submit' aria-label="add">Update</button>
-                <span className="btn" onClick={() => window.history.back()}>DONE</span>
-            </span>
+            <div className="form-actions">
+                <button type="submit" className='btn btn-primary' aria-label="update">Update</button>
+                <span className="btn btn-secondary" onClick={() => window.history.back()}>Done</span>
+            </div>
         </form>}
+        </div>
     </div>
   )
 }

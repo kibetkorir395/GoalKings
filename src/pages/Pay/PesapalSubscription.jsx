@@ -637,29 +637,31 @@ export default function PesapalSubscription() {
     <div className='pay'>
       <AppHelmet title={"Subscription Payment"} />
       <ScrollToTop />
-      {
-        (loading || processing) && <Loader />
-      }
+      {(loading || processing) && <Loader />}
 
-      <div className="subscription-details">
-        {data && <h4>Payment Of KSH {data.price}</h4>}
-        {data && <h4>You Are About To Claim {data.plan} Plan.</h4>}
-        {data && <p className="billing-info">Billing: {subscription.billing}</p>}
-      </div>
-      
-      <button 
-        className='btn' 
-        onClick={handlePayment}
-        disabled={processing || polling || !data}
-      >
-        {processing ? (
-          <span><i className="fas fa-spinner fa-spin"></i> PROCESSING...</span>
-        ) : polling ? (
-          <span><i className="fas fa-clock"></i> CHECKING PAYMENT...</span>
-        ) : (
-          <span><i className="fas fa-lock"></i> PAY NOW </span>
+      <div className="pay-card">
+        {data && <span className="plan-badge">{data.plan}</span>}
+        {data && (
+          <div className="price">
+            <span className="amount">KSH {data.price}</span>
+          </div>
         )}
-      </button>
+        {data && <span className="plan-name">{data.plan} Subscription</span>}
+        {data && (
+          <div className="plan-features">
+            <span className="feature">{data.billing} billing</span>
+            <span className="feature">Premium predictions</span>
+            <span className="feature">Daily VIP tips</span>
+          </div>
+        )}
+        <button 
+          className='btn btn-primary'
+          onClick={handlePayment}
+          disabled={processing || polling || !data}
+        >
+          {processing ? 'Processing...' : polling ? 'Checking...' : 'Pay Now'}
+        </button>
+      </div>
     </div>
   );
 }
@@ -738,7 +740,7 @@ const additionalStyles = `
   margin-left: 10px !important;
 }
 
-.btn {
+.pesapal-btn {
   padding: 14px 28px;
   font-size: 16px;
   font-weight: 600;
@@ -754,11 +756,11 @@ const additionalStyles = `
   max-width: 300px;
 }
 
-.btn i {
+.pesapal-btn i {
   margin-right: 8px;
 }
 
-.btn:disabled {
+.pesapal-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   background: linear-gradient(135deg, #a0a0a0 0%, #808080 100%);
@@ -766,7 +768,7 @@ const additionalStyles = `
   box-shadow: none;
 }
 
-.btn:not(:disabled):hover {
+.pesapal-btn:not(:disabled):hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
 }

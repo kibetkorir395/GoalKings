@@ -4,28 +4,82 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 12px;
-  gap: 16px;
-  background: linear-gradient(to bottom, var(--lite), var(--transparent), var(--light-blue));
+  padding: 0;
+  gap: 0;
+  background: linear-gradient(180deg, var(--lite), var(--light-blue));
 
-  .about-us {
+  .about-hero {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: var(--lite);
+    padding: 48px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 50%;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--lite);
+      text-align: center;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 1;
+    }
+
+    p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 600px;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  .about-content {
     width: 100%;
     max-width: 800px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    gap: 24px;
+    padding: 32px 16px;
 
-    .info {
-      width: 100%;
+    .about-section {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
+      padding: 20px 24px;
+      background: var(--lite);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: all 0.2s ease;
 
-      h1 {
+      &:hover {
+        box-shadow: var(--dark-shadow);
+      }
+
+      h2 {
         text-align: left;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 700;
+        color: var(--dark);
       }
 
       p {
@@ -33,31 +87,82 @@
         line-height: 1.7;
         color: var(--dark-grey);
       }
+    }
 
-      .links {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin: 8px 0;
-        flex-wrap: wrap;
+    .about-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4px;
 
-        a {
-          padding: 8px 20px;
-        }
+      .btn {
+        padding: 8px 20px;
       }
     }
   }
 
-  @media (max-width: 480px) {
-    padding: 8px;
+  .about-faq-wrapper {
+    width: 100%;
+    padding: 24px 16px;
+    background: var(--lite);
+  }
 
-    .about-us .info {
+  .about-testimonials {
+    width: 100%;
+    padding: 32px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      text-align: center;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      font-size: 14px;
+      color: var(--grey);
+      text-align: center;
+    }
+  }
+
+  .about-newsletter {
+    width: 100%;
+    padding: 0 16px 24px;
+  }
+
+  @media (max-width: 480px) {
+    .about-hero {
+      padding: 32px 12px;
+
       h1 {
-        font-size: 16px;
+        font-size: 22px;
       }
 
       p {
         font-size: 13px;
+      }
+    }
+
+    .about-content {
+      padding: 20px 12px;
+
+      .about-section {
+        padding: 16px 18px;
+
+        h2 {
+          font-size: 15px;
+        }
+
+        p {
+          font-size: 13px;
+        }
       }
     }
   }

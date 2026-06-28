@@ -766,13 +766,25 @@ export default function Subscription() {
     <div className='pay'>
       <AppHelmet title={"Subscription Payment"} />
       <ScrollToTop />
-      {
-        loading && <Loader />
-      }
+      {loading && <Loader />}
 
-      {data && <h4>Payment Of KSH {data.price}</h4>}
-      {data && <h4>You Are About To Claim {data.plan} Plan.</h4>}
-      <PaystackButton {...componentProps} className='btn' />
+      <div className="pay-card">
+        {data && <span className="plan-badge">{data.plan}</span>}
+        {data && (
+          <div className="price">
+            <span className="amount">KSH {data.price}</span>
+          </div>
+        )}
+        {data && <span className="plan-name">{data.plan} Subscription</span>}
+        {data && (
+          <div className="plan-features">
+            <span className="feature">{data.billing} billing</span>
+            <span className="feature">Premium predictions</span>
+            <span className="feature">Daily VIP tips</span>
+          </div>
+        )}
+        <PaystackButton {...componentProps} className='btn btn-primary' />
+      </div>
     </div>
   )
 }
