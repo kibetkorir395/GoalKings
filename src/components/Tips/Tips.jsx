@@ -13,9 +13,11 @@ import { getTips } from '../../firebase';
 import { useCurrency } from '../../context/CurrencyContext';
 
 export default function Tips() {
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+  const isDragging = useRef(false);
+  const hasDragged = useRef(false);
+  const startX = useRef(0);
+  const startScroll = useRef(0);
+  const [isDraggingState, setIsDraggingState] = useState(false);
   const [firstIcon, setFirstIcon] = useState('flex');
   const [lastIcon, setLastIcon] = useState('flex');
   const [loading, setLoading] = useState(false);
@@ -69,41 +71,31 @@ export default function Tips() {
     return isToday ? `${weekday}, Today` : `${weekday} ${monthDay}`;
   };
 
-  const handleDateSelect = (day, e) => {
-    e.stopPropagation();
-    if (!isDragging) {
-      setCurrentDate(day);
-    }
-  };
-
   useEffect(() => {
     const tabBox = tabBoxRef.current;
     if (!tabBox) return;
 
-    let hasMoved = false;
-
     const mouseDownHandler = (e) => {
-      setIsDragging(true);
-      hasMoved = false;
-      setStartX(e.pageX - tabBox.offsetLeft);
-      setScrollLeft(tabBox.scrollLeft);
+      isDragging.current = true;
+      hasDragged.current = false;
+      startX.current = e.pageX;
+      startScroll.current = tabBox.scrollLeft;
+      setIsDraggingState(true);
     };
 
     const mouseMoveHandler = (e) => {
-      if (!isDragging) return;
+      if (!isDragging.current) return;
       e.preventDefault();
-      const x = e.pageX - tabBox.offsetLeft;
-      const walk = (x - startX) * 3;
-      if (Math.abs(walk) > 5) {
-        hasMoved = true;
+      const dx = e.pageX - startX.current;
+      if (Math.abs(dx) > 5) {
+        hasDragged.current = true;
       }
-      tabBox.scrollLeft = scrollLeft - walk;
+      tabBox.scrollLeft = startScroll.current - dx;
     };
 
     const mouseUpHandler = () => {
-      setTimeout(() => {
-        setIsDragging(false);
-      }, 10);
+      isDragging.current = false;
+      setIsDraggingState(false);
     };
 
     tabBox.addEventListener('mousedown', mouseDownHandler);
@@ -119,7 +111,7 @@ export default function Tips() {
       tabBox.removeEventListener('mouseleave', mouseUpHandler);
       tabBox.removeEventListener('scroll', handleIcons);
     };
-  }, [isDragging, startX, scrollLeft]);
+  }, []);
 
   useEffect(() => {
     const dates = [];
@@ -182,15 +174,17 @@ export default function Tips() {
           />
         </div>
         <ul
-          className={`tabs-box ${isDragging ? 'dragging' : ''}`}
+          className={`tabs-box ${isDraggingState ? 'dragging' : ''}`}
           ref={tabBoxRef}
-          style={{ overflow: 'auto', whiteSpace: 'nowrap', cursor: isDragging ? 'grabbing' : 'grab', userSelect: 'none' }}
+          style={{ overflow: 'auto', whiteSpace: 'nowrap', cursor: isDraggingState ? 'grabbing' : 'grab', userSelect: 'none' }}
         >
           {days &&
             days.map((day) => (
               <li
                 className={`tab ${currentDate === day ? 'active' : ''}`}
-                onClick={(e) => handleDateSelect(day, e)}
+                onClick={() => {
+                  if (!hasDragged.current) setCurrentDate(day);
+                }}
                 key={day}
                 aria-label={day}
               >
