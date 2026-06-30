@@ -10,9 +10,9 @@ export const checkSubscriptionStatus = (user, setNotification) => {
 
   const timeLimits = {
     "Day": 24 * 60 * 60 * 1000,
-    "Weeky": 7 * 24 * 60 * 60 * 1000,
-    "Monthy": 30 * 24 * 60 * 60 * 1000, // Simplified, adjust as needed
-    "Yeary": 365 * 24 * 60 * 60 * 1000
+    "Week": 7 * 24 * 60 * 60 * 1000,
+    "Month": 30 * 24 * 60 * 60 * 1000,
+    "Year": 365 * 24 * 60 * 60 * 1000
   };
 
   if (timeDifference >= timeLimits[user.subscription.billing]) {

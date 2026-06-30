@@ -55,8 +55,7 @@ export default function EditUser() {
             setEmail(user.email)
             setUsername(user.username)
             setIsPremium(user.isPremium)
-            setSelectedPlan(user.subscription ? user.subscription.plan: '')
-            user.subscription ? selectedPlan(user.subscription) : setSelectedPlan(null)
+            setSelectedPlan(user.subscription ? user.subscription.plan : '')
             user.subDate && setSubDate(toDateTimeLocal(user.subDate))
         }
     }, [user]);
@@ -75,8 +74,8 @@ export default function EditUser() {
             subscription: selectedPlan === '' ? null : {
                 isPremium,
                 subDate,
-                billing: subDate,
-                plan: subscription.plan,
+                billing: selectedPlan,
+                plan: selectedPlan,
               }
         } ).then(response => {
             setNotification({
