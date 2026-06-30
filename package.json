@@ -14,6 +14,7 @@
 	"dependencies": {
 		"firebase": "^11.1.0",
 		"intasend-inlinejs-sdk": "^4.0.7",
+		"kora-checkout": "^1.0.4",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
 		"react-helmet-async": "^2.0.5",
@@ -24,7 +25,7 @@
 		"recoil": "^0.7.7",
 		"recoil-persist": "^5.1.0",
 		"sass": "^1.83.1",
-        "sweetalert2": "^11.26.23"
+		"sweetalert2": "^11.26.23"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.17.0",

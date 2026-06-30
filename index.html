@@ -1,104 +1,186 @@
 <!doctype html>
 <html lang="en">
-<meta>
-<meta charset="UTF-8" />
-<link rel="icon" href="/favicon.ico" />
-<!--Include favicon links for multiple resolutions-->
-<link rel="icon" type="image/png" sizes="32x32" href="/logo32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/logo16.png" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
 
-<link rel="apple-touch-icon" href="/logo192.png" />
-<link rel="manifest" href="/manifest.json" crossorigin="anonymous" />
-<link rel="shortcut icon" type="image/x-icon" href="/logo512.png" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-<meta name="theme-color" content="#1f4568">
-<meta name="background-color" content="#ebf4fc" />
-<meta name="description" content="Get expert football tips, accurate match predictions, live scores, and the latest betting odds. Stay updated with fixtures and results from top leagues worldwide" />
-<meta name="keywords" content="football tips, football predictions, live football scores, football betting odds, football results, football fixtures, football leagues, football betting, live football updates, soccer predictions, betting tips, live match scores, football match results, match schedules, football stats, football news, league standings, football competitions, soccer betting odds">
-				<meta name="author" content="Goal Kings">
-<link rel="canonical" href="/" />
+  <!-- Primary Meta Tags -->
+  <title>Goal Kings - Expert Football Predictions & VIP Tips</title>
+  <meta name="title" content="Goal Kings - Expert Football Predictions & VIP Tips" />
+  <meta name="description" content="Get expert football tips, accurate match predictions, live scores, and the latest betting odds. Stay updated with fixtures and results from top leagues worldwide. Premium VIP predictions for serious bettors." />
+  <meta name="keywords" content="football tips, football predictions, live football scores, football betting odds, football results, football fixtures, football leagues, football betting, live football updates, soccer predictions, betting tips, live match scores, football match results, match schedules, football stats, football news, league standings, football competitions, soccer betting odds, VIP tips, premium predictions, fixed matches, sure wins, daily tips, weekly tips, monthly subscription" />
+  <meta name="author" content="Goal Kings" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://goalkings.com/" />
 
-<!-- Open Graph -->
-				<meta property="og:title" content="Goal Kings" />
-<meta property="og:description" content="Get all the latest ✓Fixed VIP Tips ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions." />
-<meta property="og:image" content="/logo512.png" />
-				<meta property="og:url" content="https://goalkings.com/" />
-<meta property="og:type" content="website" />
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/logo32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/logo16.png" />
+  <link rel="shortcut icon" type="image/x-icon" href="/logo512.png" />
 
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image" />
-				<meta name="twitter:title" content="Goal Kings" />
-<meta name="twitter:description" content="Get all the latest ✓Fixed VIP Tips ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions." />
-<meta name="twitter:image" content="/logo512.png" />
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#059212" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0A6847" media="(prefers-color-scheme: dark)" />
+  <meta name="background-color" content="#ffffff" />
+  <meta name="msapplication-TileColor" content="#059212" />
+  <meta name="msapplication-tap-highlight" content="no" />
 
-<!-- iOS -->
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default" />
-				<meta name="apple-mobile-web-app-title" content="Goal Kings" />
+  <!-- iOS PWA Meta Tags -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Goal Kings" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="format-detection" content="email=no" />
 
-<!--Add icons for various Apple device sizes-->
-<link rel="apple-touch-icon" sizes="120x120" href="/logo120.png" />
-<link rel="apple-touch-icon" sizes="152x152" href="/logo152.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="/logo180.png" />
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/logo120.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/logo152.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo180.png" />
+  <link rel="apple-touch-startup-image" href="/logo512.png" />
 
-<!--Control how search engines index your page-->
-<meta name="robots" content="index, follow" />
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json" crossorigin="anonymous" />
 
-<!--If your site supports multiple languages, add alternate links-->
-				<link rel="alternate" href="https://goalkings.com/" hreflang="en" />
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://goalkings.com/" />
+  <meta property="og:title" content="Goal Kings - Expert Football Predictions & VIP Tips" />
+  <meta property="og:description" content="Get all the latest Fixed VIP Tips, Football Predictions, Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions." />
+  <meta property="og:image" content="https://goalkings.com/logo512.png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta property="og:image:alt" content="Goal Kings - Football Predictions" />
+  <meta property="og:site_name" content="Goal Kings" />
+  <meta property="og:locale" content="en_US" />
 
-<!--If your app uses custom web fonts-->
-<!--<link rel="preload" href="/fonts/custom-font.woff2" as="font" type="font/woff2" crossorigin="anonymous" />-->
-				<title>Goal Kings</title>
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://goalkings.com/" />
+  <meta name="twitter:title" content="Goal Kings - Expert Football Predictions & VIP Tips" />
+  <meta name="twitter:description" content="Get all the latest Fixed VIP Tips, Football Predictions, Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions." />
+  <meta name="twitter:image" content="https://goalkings.com/logo512.png" />
+  <meta name="twitter:creator" content="@goalkings_ke" />
+  <meta name="twitter:site" content="@goalkings_ke" />
+
+  <!-- Alternate Languages -->
+  <link rel="alternate" href="https://goalkings.com/" hreflang="en" />
+  <link rel="alternate" href="https://goalkings.com/" hreflang="x-default" />
+
+  <!-- Preconnect to external domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://static.ads-twitter.com" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Goal Kings",
+    "description": "Expert football predictions, VIP tips, live scores, and betting odds for top leagues worldwide.",
+    "url": "https://goalkings.com/",
+    "applicationCategory": "SportsApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "offers": {
+      "@type": "Offer",
+      "price": "250",
+      "priceCurrency": "KES",
+      "description": "Daily VIP subscription"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "1250"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Goal Kings",
+    "url": "https://goalkings.com/",
+    "logo": "https://goalkings.com/logo512.png",
+    "sameAs": [
+      "https://www.facebook.com/share/1ETmmWvxHn/",
+      "https://twitter.com/goalkings_ke",
+      "https://instagram.com/goalkings_ke",
+      "https://t.me/goalkings_ke"
+    ]
+  }
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
 
+  <!-- Critical Scripts -->
   <script type="module" src="/src/main.jsx"></script>
+
   <script>
+    // Register Service Worker
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then(registration => {}).catch(error => {
-          console.error('Service Worker registration failed:', error);
-        });
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+          .then(registration => {
+            console.log('SW registered:', registration.scope);
+
+            // Check for updates
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              if (newWorker) {
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    // New content available, notify user
+                    if (confirm('New version available! Reload to update?')) {
+                      newWorker.postMessage({ type: 'SKIP_WAITING' });
+                      window.location.reload();
+                    }
+                  }
+                });
+              }
+            });
+          })
+          .catch(error => console.error('SW registration failed:', error));
+      });
     }
 
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0A6847');
-    } else {
-      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#059212');
-    }
+    // Dynamically update theme color based on color scheme
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const updateThemeColor = (isDark) => {
+      themeColorMeta?.setAttribute('content', isDark ? '#0A6847' : '#059212');
+    };
+
+    updateThemeColor(mediaQuery.matches);
+    mediaQuery.addEventListener('change', (e) => updateThemeColor(e.matches));
   </script>
+
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16766305770">
-  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16766305770"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'AW-16766305770');
   </script>
-<!-- Twitter conversion tracking base code -->
-<script>
-!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
-},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
-a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
-twq('config','ql57w');
-</script>
-<!-- End Twitter conversion tracking base code -->
-<!-- Twitter conversion tracking event code -->
-<script type="text/javascript">
-  // Insert Twitter Event ID
-  twq('event', 'tw-ql57w-ql57x', {
-    email_address: null // use this to pass a user’s email address
-  });
-</script>
-<!-- End Twitter conversion tracking event code -->
-</body>
 
+  <!-- Twitter conversion tracking -->
+  <script>
+    !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+    },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
+    a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+    twq('config','ql57w');
+  </script>
+  <script type="text/javascript">
+    twq('event', 'tw-ql57w-ql57x', { email_address: null });
+  </script>
+</body>
 </html>

@@ -2,10 +2,13 @@ import './Pricing.scss';
 import { NavLink, useLocation } from 'react-router-dom';
 import { pricings } from '../../data';
 import { useState } from 'react';
+import { useCurrency } from '../../context/CurrencyContext';
 
 export default function Pricing() {
   const [billing, setBilling] = useState("Day");
   const location = useLocation();
+  const { symbol, convertPrice } = useCurrency();
+
   return (
     <div className='pricing' id='pricing'>
       <h1 className='head'>Pricing</h1>
@@ -49,9 +52,10 @@ export default function Pricing() {
       <div className="wrapper">
         {
           pricings.filter(item => item.billing === billing).map(pricing => {
+            const convertedPrice = convertPrice(pricing.price);
             return (
               <div key={pricing.id}>
-                <h2><span>KSH {pricing.price}</span>/{pricing.billing}</h2>
+                <h2><span>{symbol} {convertedPrice}</span>/{pricing.billing}</h2>
                 <p>{pricing.title}</p>
                 <h3>Features</h3>
                 <ul>
@@ -62,7 +66,21 @@ export default function Pricing() {
                   }
                 </ul>
                 <img src="https://i.postimg.cc/2jV99bKc/Vector-1.png" alt="bg" className="table-bg" />
-                <NavLink className="btn" style={{ backgroundColor: pricing.color }} state={{ from: location, subscription: pricing }} to={"/subscribe"}>Subscribe now</NavLink>
+                <NavLink
+                  className="btn"
+                  style={{ backgroundColor: pricing.color }}
+                  state={{
+                    from: location,
+                    subscription: {
+                      ...pricing,
+                      price: convertedPrice,
+                      currency: symbol
+                    }
+                  }}
+                  to={"/subscribe"}
+                >
+                  Subscribe now
+                </NavLink>
               </div>
             );
           })

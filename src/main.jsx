@@ -5,13 +5,16 @@ import './App.scss'
 import { BrowserRouter } from 'react-router-dom'
 import { RecoilRoot } from 'recoil';
 import { HelmetProvider } from 'react-helmet-async'
+import { CurrencyProvider } from './context/CurrencyContext'
 
 createRoot(document.getElementById('root')).render(
   <RecoilRoot>
     <BrowserRouter>
       <StrictMode>
         <HelmetProvider>
-          <App />
+          <CurrencyProvider>
+            <App />
+          </CurrencyProvider>
         </HelmetProvider>
       </StrictMode>
     </BrowserRouter>

@@ -10,6 +10,7 @@ import { useRecoilState } from 'recoil';
 import { userState } from '../../recoil/atoms';
 import Loader from '../Loader/Loader';
 import { getTips } from '../../firebase';
+import { useCurrency } from '../../context/CurrencyContext';
 
 export default function Tips() {
   const [isDragging, setIsDragging] = useState(false);
@@ -26,6 +27,7 @@ export default function Tips() {
   const [tips, setTips] = useState(null);
   const location = useLocation();
   const tabBoxRef = useRef(null);
+  const { symbol, convertPrice } = useCurrency();
 
   const handleIcons = () => {
     const tabBox = tabBoxRef.current;
@@ -67,12 +69,22 @@ export default function Tips() {
     return isToday ? `${weekday}, Today` : `${weekday} ${monthDay}`;
   };
 
+  const handleDateSelect = (day, e) => {
+    e.stopPropagation();
+    if (!isDragging) {
+      setCurrentDate(day);
+    }
+  };
+
   useEffect(() => {
     const tabBox = tabBoxRef.current;
     if (!tabBox) return;
 
+    let hasMoved = false;
+
     const mouseDownHandler = (e) => {
       setIsDragging(true);
+      hasMoved = false;
       setStartX(e.pageX - tabBox.offsetLeft);
       setScrollLeft(tabBox.scrollLeft);
     };
@@ -82,10 +94,17 @@ export default function Tips() {
       e.preventDefault();
       const x = e.pageX - tabBox.offsetLeft;
       const walk = (x - startX) * 3;
+      if (Math.abs(walk) > 5) {
+        hasMoved = true;
+      }
       tabBox.scrollLeft = scrollLeft - walk;
     };
 
-    const mouseUpHandler = () => setIsDragging(false);
+    const mouseUpHandler = () => {
+      setTimeout(() => {
+        setIsDragging(false);
+      }, 10);
+    };
 
     tabBox.addEventListener('mousedown', mouseDownHandler);
     tabBox.addEventListener('mousemove', mouseMoveHandler);
@@ -144,6 +163,12 @@ export default function Tips() {
     setAdmin(user && adminEmails.includes(user.email));
   }, [user]);
 
+  const subscriptionData = {
+    ...pricings[0],
+    price: convertPrice(pricings[0].price),
+    currency: symbol
+  };
+
   return (
     <div className="tips">
       <AppHelmet title="Tips" />
@@ -165,7 +190,7 @@ export default function Tips() {
             days.map((day) => (
               <li
                 className={`tab ${currentDate === day ? 'active' : ''}`}
-                onClick={() => setCurrentDate(day)}
+                onClick={(e) => handleDateSelect(day, e)}
                 key={day}
                 aria-label={day}
               >
@@ -187,7 +212,7 @@ export default function Tips() {
 
       <NavLink
         className="subscribe-btn"
-        state={{ from: location, subscription: pricings[0] }}
+        state={{ from: location, subscription: subscriptionData }}
         to="/subscribe"
       >
         SUBSCRIBE TO VIEW VIP TIPS

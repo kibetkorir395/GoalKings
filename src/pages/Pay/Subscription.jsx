@@ -596,6 +596,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { notificationState, subscriptionState, userState } from '../../recoil/atoms';
 import { PaystackButton } from 'react-paystack';
 import { getUser, updateUser } from '../../firebase';
+import { useCurrency } from '../../context/CurrencyContext';
 
 // Twitter Events Utility Functions (implemented directly in the file)
 const trackTwitterEvent = (eventId, parameters = {}) => {
@@ -660,17 +661,28 @@ export default function Subscription() {
   const setNotification = useSetRecoilState(notificationState);
   const [subscription, setSubscription] = useRecoilState(subscriptionState);
   const navigate = useNavigate();
+  const { symbol, currency, convertPrice } = useCurrency();
 
   // Initialize Twitter pixel queue
   useTwitterPixelQueue();
 
   useEffect(() => {
-    if (location.state) {
-      setData(location.state.subscription)
-      setSubscription(location.state.subscription)
+    if (location.state && location.state.subscription) {
+      const sub = location.state.subscription;
+      setData({
+        ...sub,
+        price: sub.price != null ? sub.price : convertPrice(sub.price),
+        currency: sub.currency || symbol,
+      });
+      setSubscription({
+        ...sub,
+        price: sub.price != null ? sub.price : convertPrice(sub.price),
+        currency: sub.currency || symbol,
+      });
     } else {
-      setData(pricings[0])
-      setSubscription(pricings[0])
+      const fallback = { ...pricings[0], price: convertPrice(pricings[0].price), currency: symbol };
+      setData(fallback);
+      setSubscription(fallback);
     }
   }, [location]);
 
@@ -686,7 +698,7 @@ export default function Subscription() {
       // Track successful purchase conversion
       trackPurchase(
         data?.price || subscription.price,
-        'KES',
+        currency,
         [
           {
             id: subscription.plan,
@@ -699,12 +711,16 @@ export default function Subscription() {
     });
   };
 
+  const displaySymbol = data?.currency || symbol;
+  const displayPrice = data?.price || subscription.price;
+  const payCurrency = currency === 'NGN' ? 'NGN' : 'KES';
+
   const componentProps = {
     reference: new Date().getTime().toString(),
     email: user ? user.email : "coongames8@gmail.com",
-    amount: (data && data.price * 100) || subscription.price * 100,
+    amount: displayPrice * 100,
     publicKey: "pk_live_71bc9718fd9b78e12c120101e663c27d9fc7b1cf",
-    currency: "KES",
+    currency: payCurrency,
     metadata: {
       name: user ? user.email : "coongames8@gmail.com",
       plan: data?.plan || subscription.plan,
@@ -714,13 +730,13 @@ export default function Subscription() {
     onSuccess: (response) => {
       // Track payment success (before upgrade completion)
       trackTwitterEvent('tw-ql57w-ql57x', {
-        value: data?.price || subscription.price,
-        currency: 'KES',
+        value: displayPrice,
+        currency: currency,
         contents: [
           {
             id: subscription.plan,
             quantity: 1,
-            item_price: data?.price || subscription.price
+            item_price: displayPrice
           }
         ],
         payment_status: 'successful'
@@ -730,13 +746,13 @@ export default function Subscription() {
     onClose: () => {
       // Track when user closes payment dialog without completing
       trackTwitterEvent('tw-ql57w-ql57x', {
-        value: data?.price || subscription.price,
-        currency: 'KES',
+        value: displayPrice,
+        currency: currency,
         contents: [
           {
             id: subscription.plan,
             quantity: 1,
-            item_price: data?.price || subscription.price
+            item_price: displayPrice
           }
         ],
         payment_status: 'cancelled'
@@ -749,7 +765,7 @@ export default function Subscription() {
     if (data) {
       trackTwitterEvent('tw-ql57w-ql57x', {
         value: data.price,
-        currency: 'KES',
+        currency: currency,
         contents: [
           {
             id: data.plan,
@@ -772,7 +788,7 @@ export default function Subscription() {
         {data && <span className="plan-badge">{data.plan}</span>}
         {data && (
           <div className="price">
-            <span className="amount">KSH {data.price}</span>
+            <span className="amount">{displaySymbol} {displayPrice}</span>
           </div>
         )}
         {data && <span className="plan-name">{data.plan} Subscription</span>}

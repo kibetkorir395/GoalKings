@@ -1,72 +1,67 @@
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 
-export default function AppHelmet({ title }) {
+export default function AppHelmet({ title, description }) {
   const location = useLocation();
-  const canonicalUrl = `${window.location.origin}${location.pathname}`;
+  const canonicalUrl = `https://goalkings.com${location.pathname}`;
+  const siteName = 'Goal Kings';
+  const defaultDescription = 'Get expert football predictions, VIP tips, live scores, and the latest betting odds. Premium predictions for top leagues worldwide.';
+
+  const pageTitle = title
+    ? `${title} | ${siteName}`
+    : `${siteName} - Expert Football Predictions & VIP Tips`;
+
+  const pageDescription = description || defaultDescription;
 
   return (
     <Helmet>
-      {/* Existing meta tags */}
+      <html lang="en" />
       <meta charSet="UTF-8" />
-      <link rel="icon" href="/favicon.ico" />
-      <link rel="icon" type="image/png" sizes="32x32" href="/logo32.png" />
-      <link rel="icon" type="image/png" sizes="16x16" href="/logo16.png" />
-      <link rel="apple-touch-icon" href="/logo192.png" />
-      <link rel="manifest" href="/manifest.json" crossorigin="anonymous" />
-      <link rel="shortcut icon" type="image/x-icon" href="/logo512.png" />
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no"
-      />
-      <meta name="theme-color" content="#00BFFF" />
-      <meta
-        name="description"
-        content="Get all the latest ✓Fixed VIP Tips ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions, including the Premier League, Championship and across the world."
-      />
-      <meta
-        name="keywords"
-        content="Football Predictions, Betting Odds, Live Scores, Live Sports, Football Results, Football Fixtures, Football Today, Premier League, Championship, Super Sports, Laliga, Bundesliga, Serie A"
-      />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+
+      <title>{pageTitle}</title>
+      <meta name="title" content={pageTitle} />
+      <meta name="description" content={pageDescription} />
+      <meta name="keywords" content="football tips, football predictions, VIP tips, live scores, betting odds, Premier League, La Liga, Serie A, Bundesliga, Champions League, football betting, match predictions" />
       <meta name="author" content="Goal Kings" />
+      <meta name="robots" content="index, follow" />
       <link rel="canonical" href={canonicalUrl} />
 
-      {/* Open Graph tags for social media */}
-      <meta property="og:title" content={title} />
-      <meta
-        property="og:description"
-        content="Get all the latest ✓Fixed VIP Tips ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions."
-      />
-      <meta
-        property="og:image"
-        content={`${window.location.origin}/logo512.png`}
-      />
-      <meta property="og:url" content={canonicalUrl} />
+      {/* Theme Colors */}
+      <meta name="theme-color" content="#059212" />
+      <meta name="msapplication-navbutton-color" content="#059212" />
+      <meta name="msapplication-TileColor" content="#059212" />
+
+      {/* Open Graph */}
       <meta property="og:type" content="website" />
+      <meta property="og:site_name" content={siteName} />
+      <meta property="og:url" content={canonicalUrl} />
+      <meta property="og:title" content={pageTitle} />
+      <meta property="og:description" content={pageDescription} />
+      <meta property="og:image" content="https://goalkings.com/logo512.png" />
+      <meta property="og:image:width" content="512" />
+      <meta property="og:image:height" content="512" />
+      <meta property="og:image:alt" content={`${siteName} Logo`} />
+      <meta property="og:locale" content="en_US" />
 
-      {/* Twitter tags */}
+      {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta
-        name="twitter:description"
-        content="Get all the latest ✓Fixed VIP Tips ✓Football Predictions, ✓Latest Football Betting Odds and livescores, results & fixtures for all leagues and competitions."
-      />
-      <meta
-        name="twitter:image"
-        content={`${window.location.origin}/logo512.png`}
-      />
+      <meta name="twitter:site" content="@goalkings_ke" />
+      <meta name="twitter:creator" content="@goalkings_ke" />
+      <meta name="twitter:url" content={canonicalUrl} />
+      <meta name="twitter:title" content={pageTitle} />
+      <meta name="twitter:description" content={pageDescription} />
+      <meta name="twitter:image" content="https://goalkings.com/logo512.png" />
+      <meta name="twitter:image:alt" content={`${siteName} Logo`} />
 
-      {/* X (Twitter) Base Pixel */}
-      <script>
-        {`
-          !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
-          },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
-          a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
-          twq('config','ql57w');
-        `}
-      </script>
+      {/* PWA / Native App */}
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta name="apple-mobile-web-app-title" content={siteName} />
 
-      <title>{title} | Welcome to the Home for Football Predictions!</title>
+      <link rel="manifest" href="/manifest.json" />
+      <link rel="apple-touch-icon" href="/logo192.png" />
     </Helmet>
   );
 }

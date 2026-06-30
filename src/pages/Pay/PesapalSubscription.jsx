@@ -10,6 +10,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { notificationState, subscriptionState, userState } from '../../recoil/atoms';
 import { getUser, updateUser } from '../../firebase';
 import Swal from 'sweetalert2';
+import { useCurrency } from '../../context/CurrencyContext';
 
 // Twitter Events Utility Functions
 const trackTwitterEvent = (eventId, parameters = {}) => {
@@ -76,17 +77,28 @@ export default function PesapalSubscription() {
   const navigate = useNavigate();
   const pollIntervalRef = useRef(null);
   const pollingTimeoutRef = useRef(null);
+  const { symbol, currency, convertPrice } = useCurrency();
 
   // Initialize Twitter pixel queue
   useTwitterPixelQueue();
 
   useEffect(() => {
-    if (location.state) {
-      setData(location.state.subscription);
-      setSubscription(location.state.subscription);
+    if (location.state && location.state.subscription) {
+      const sub = location.state.subscription;
+      setData({
+        ...sub,
+        price: sub.price != null ? sub.price : convertPrice(sub.price),
+        currency: sub.currency || symbol,
+      });
+      setSubscription({
+        ...sub,
+        price: sub.price != null ? sub.price : convertPrice(sub.price),
+        currency: sub.currency || symbol,
+      });
     } else {
-      setData(pricings[0]);
-      setSubscription(pricings[0]);
+      const fallback = { ...pricings[0], price: convertPrice(pricings[0].price), currency: symbol };
+      setData(fallback);
+      setSubscription(fallback);
     }
   }, [location]);
 
@@ -102,7 +114,7 @@ export default function PesapalSubscription() {
       // Track successful purchase conversion
       trackPurchase(
         data?.price || subscription.price,
-        'KES',
+        currency,
         [
           {
             id: subscription.plan,
@@ -482,13 +494,15 @@ export default function PesapalSubscription() {
     }
 
     // Confirm payment
+    const displaySymbol = data?.currency || symbol;
+    const displayPrice = data?.price || subscription.price;
     const result = await Swal.fire({
       icon: 'question',
       title: 'Confirm Payment',
       html: `
         <div style="text-align: left; padding: 5px;">
           <p><strong>Plan:</strong> ${subscription.plan}</p>
-          <p><strong>Amount:</strong> KSH ${data?.price || subscription.price}</p>
+          <p><strong>Amount:</strong> ${displaySymbol} ${displayPrice}</p>
           <p><strong>Billing:</strong> ${subscription.billing}</p>
         </div>
       `,
@@ -505,8 +519,8 @@ export default function PesapalSubscription() {
       amount: data?.price || subscription.price,
       email: user.email,
       description: `${subscription.plan} Subscription (${subscription.billing})`,
-      countryCode: "KE",
-      currency: "KES",
+      countryCode: currency === 'NGN' ? 'NG' : 'KE',
+      currency: currency,
       url: window.location.origin + window.location.pathname,
       callbackUrl: window.location.origin, //+ '/payment-callback',
       consumerKey: "nbZBtDnSEt9X+l0cHNDFren+7dTQIJXl",
@@ -516,7 +530,7 @@ export default function PesapalSubscription() {
     // Track subscription page view
     trackTwitterEvent('tw-ql57w-ql57x', {
       value: data?.price || subscription.price,
-      currency: 'KES',
+      currency: currency,
       contents: [
         {
           id: subscription.plan,
@@ -613,7 +627,7 @@ export default function PesapalSubscription() {
     if (data) {
       trackTwitterEvent('tw-ql57w-ql57x', {
         value: data.price,
-        currency: 'KES',
+        currency: currency,
         contents: [
           {
             id: data.plan,
@@ -633,6 +647,8 @@ export default function PesapalSubscription() {
     };
   }, []);
 
+  const displaySymbol = data?.currency || symbol;
+
   return (
     <div className='pay'>
       <AppHelmet title={"Subscription Payment"} />
@@ -643,7 +659,7 @@ export default function PesapalSubscription() {
         {data && <span className="plan-badge">{data.plan}</span>}
         {data && (
           <div className="price">
-            <span className="amount">KSH {data.price}</span>
+            <span className="amount">{displaySymbol} {data.price}</span>
           </div>
         )}
         {data && <span className="plan-name">{data.plan} Subscription</span>}
@@ -654,7 +670,7 @@ export default function PesapalSubscription() {
             <span className="feature">Daily VIP tips</span>
           </div>
         )}
-        <button 
+        <button
           className='btn btn-primary'
           onClick={handlePayment}
           disabled={processing || polling || !data}

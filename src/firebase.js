@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -75,6 +75,26 @@ export const registerUser = (username, email, password, setNotification) => {
   });
   return;
 }
+
+export const resetPassword = async (email, setNotification, setLoading) => {
+  setLoading(true);
+  try {
+    await sendPasswordResetEmail(auth, email);
+    setNotification({
+      isVisible: true,
+      type: 'success',
+      message: "Password reset email sent! Check your inbox.",
+    });
+  } catch (error) {
+    setNotification({
+      isVisible: true,
+      type: 'error',
+      message: error.message || "Failed to send reset email.",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
 export const updateUser = async (userId, isPremium, subscription, setNotification) => {
   const usercollref = doc(db, 'users', userId)
