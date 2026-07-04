@@ -76,11 +76,12 @@ export default function Tips() {
     if (!tabBox) return;
 
     const mouseDownHandler = (e) => {
-      isDragging.current = true;
-      hasDragged.current = false;
-      startX.current = e.pageX;
-      startScroll.current = tabBox.scrollLeft;
-      setIsDraggingState(true);
+      //isDragging.current = true;
+      //hasDragged.current = false;
+      //startX.current = e.pageX;
+      //startScroll.current = tabBox.scrollLeft;
+      //setIsDraggingState(true);
+      //tabBox.classList.add('dragging'); // Add this line
     };
 
     const mouseMoveHandler = (e) => {
@@ -96,6 +97,7 @@ export default function Tips() {
     const mouseUpHandler = () => {
       isDragging.current = false;
       setIsDraggingState(false);
+      tabBoxRef.current.classList.remove('dragging'); // Add this line
     };
 
     tabBox.addEventListener('mousedown', mouseDownHandler);
@@ -116,7 +118,7 @@ export default function Tips() {
   useEffect(() => {
     const dates = [];
     const today = new Date();
-    for (let i = 0; i < 14; i++) {
+    for (let i = 0; i < 7; i++) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
       const year = date.getFullYear();
@@ -176,7 +178,7 @@ export default function Tips() {
         <ul
           className={`tabs-box ${isDraggingState ? 'dragging' : ''}`}
           ref={tabBoxRef}
-          style={{ overflow: 'auto', whiteSpace: 'nowrap', cursor: isDraggingState ? 'grabbing' : 'grab', userSelect: 'none' }}
+          style={{ overflow: 'auto', whiteSpace: 'nowrap', cursor: isDraggingState ? 'grabbing' : 'grab'}}
         >
           {days &&
             days.map((day) => (
