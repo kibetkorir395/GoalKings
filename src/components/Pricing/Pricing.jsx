@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
 
 export default function Pricing() {
-  const [billing, setBilling] = useState("Day");
+  const [billing, setBilling] = useState("Week");
   const location = useLocation();
   const { symbol, convertPrice } = useCurrency();
 
@@ -55,6 +55,12 @@ export default function Pricing() {
             const convertedPrice = convertPrice(pricing.price);
             return (
               <div key={pricing.id}>
+                {pricing.billing === "Week" && (
+                  <span className="badge popular">Popular</span>
+                )}
+                {pricing.billing === "Month" && (
+                  <span className="badge best-value">Best Value</span>
+                )}
                 <h2><span>{symbol} {convertedPrice}</span>/{pricing.billing}</h2>
                 <p>{pricing.title}</p>
                 <h3>Features</h3>

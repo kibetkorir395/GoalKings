@@ -78,6 +78,34 @@
       overflow: hidden;
       transition: all 0.2s ease;
 
+      position: relative;
+
+      .badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        z-index: 1;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+        &.popular {
+          //background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg, var(--primary-dark) 0%, var(--green) 100%);
+          color: white;
+        }
+
+        &.best-value {
+          //background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+          background: linear-gradient(135deg, var(--dark-grey) 0%, var(--green) 100%);
+          color: white;
+        }
+      }
+
       &:hover {
         transform: translateY(-2px);
         box-shadow: var(--dark-shadow);
@@ -158,6 +186,13 @@
     .wrapper > div {
       max-width: 100%;
       min-height: 240px;
+
+      .badge {
+        font-size: 10px;
+        padding: 3px 10px;
+        top: 8px;
+        right: 8px;
+      }
     }
   }
 }
