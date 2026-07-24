@@ -57,6 +57,8 @@ export const registerUser = (username, email, password, setNotification) => {
         type: 'success',
         message: `User with ${user.email} has been registered successfully`,
       });
+    }).then(() => {
+      window.location.reload();
     }).catch(async (error) => {
       const errorMessage = await error.message;
       setNotification({
