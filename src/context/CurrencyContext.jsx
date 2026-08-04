@@ -2,9 +2,13 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const CurrencyContext = createContext();
 
-const EXCHANGE_RATES = {
+/*const EXCHANGE_RATES = {
   KES: { NGN: 12.5 },
   NGN: { KES: 0.08 },
+};*/
+const EXCHANGE_RATES = {
+  KES: { NGN: 10.55 },
+  NGN: { KES: 0.095 },
 };
 
 const CURRENCY_CONFIG = {
