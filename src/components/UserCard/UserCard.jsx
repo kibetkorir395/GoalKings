@@ -1,4 +1,5 @@
 //import "./UserCard.scss";
+import { useEffect, useState, useMemo } from 'react';
 import backgroundImage from '../../assets/3.jpg';
 import backgroundImage2 from '../../assets/4.jpg';
 import backgroundImage3 from '../../assets/5.jpg';
@@ -33,6 +34,10 @@ const UserCard = ({user}) => {
 		})}`;
 		return formattedDate;
 	}
+
+	useEffect(() => {
+		//user.subscription && console.log(user.email)
+	}, [user]);
   return (
   <NavLink className="card user-card"  to={`/users/${user.username ? "@" + user.username : user.email}`} state={user}>
     <div className="cover-bg"  style={{
@@ -41,13 +46,13 @@ const UserCard = ({user}) => {
     <div className="user-info-wrap">
       <img src={user.isPremium ? backgroundImage : backgroundImage2} alt="" className="user-photo" />
       <div className="user-info">
-        <div className="user-name">{user.subscription ? user.subscription : " Free"} Plan</div>
+        <div className="user-name">{user.subscription ? user.subscription.plan : " Free"} Plan</div>
         <p className="user-title">@{user.username}</p>
       </div>
     </div>
     <div className="user-bio">
         <div className="data"><MdOutlineEmail className="mail" /> {user.email}</div>
-        <div className="data">{user.subscription ? user.subscription : " Free"} Plan</div>
+        <div className="data">{user.subscription !==null ? user.subscription.paln : " Free"} Plan</div>
       {user.subscription && <>
         <div className="data">{formatDate(user.subDate)}</div>
       </>}

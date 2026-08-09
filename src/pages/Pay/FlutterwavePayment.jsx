@@ -12,7 +12,7 @@ import { useCurrency } from '../../context/CurrencyContext';
 import Swal from 'sweetalert2';
 
 // Flutterwave API Configuration
-const FLUTTERWAVE_API_BASE = "https://stackblitz-starters-esjaecw1-production.up.railway.app/api";
+const FLUTTERWAVE_API_BASE = "https://flutter-payment-production.up.railway.app/api";
 
 export default function FlutterwavePayment() {
     const [user, setUser] = useRecoilState(userState);
