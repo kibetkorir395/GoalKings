@@ -56,7 +56,7 @@ export default function EditUser() {
             setUsername(user.username)
             setIsPremium(user.isPremium)
             setSelectedPlan(user.subscription ? user.subscription.plan : '')
-            user.subDate && setSubDate(toDateTimeLocal(user.subDate))
+            user.subscription?.subDate && setSubDate(toDateTimeLocal(user.subscription.subDate))
         }
     }, [user]);
 

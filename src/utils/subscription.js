@@ -1,4 +1,4 @@
-import { updateUser } from "../firebase";
+import { updateUser, updateUserLocality } from "../firebase";
 
 
 export const checkSubscriptionStatus = (user, setNotification) => {
@@ -19,3 +19,37 @@ export const checkSubscriptionStatus = (user, setNotification) => {
     updateUser(user.email, false, null, setNotification);
   }
 };
+
+export const checkLocality = (user, locality) => {
+  if (!user|| user.locality) return;
+
+  if (!user.locality) {
+    updateUserLocality(user.email, locality);
+    return;
+  }
+
+}
+
+
+// Device Detection
+function detectDevice() {
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  const isAndroid = /Android/.test(ua);
+  const isWindows = /Windows/.test(ua);
+  const isMac = /Macintosh/.test(ua);
+  const isLinux = /Linux/.test(ua);
+  
+  return { isIOS, isAndroid, isWindows, isMac, isLinux, isMobile: isIOS || isAndroid };
+}
+
+
+export function getUserPlatform () {
+  const device = detectDevice();
+
+  if (device.isIOS) return 'ios';
+  if (device.isAndroid) return 'android';
+  if (device.isWindows) return 'windows';
+  if (device.isMac) return 'mac';
+  return 'pwa';
+}

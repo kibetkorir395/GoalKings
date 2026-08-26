@@ -328,9 +328,6 @@ export default function PaystackPayments() {
                 throw new Error("User email not found. Please login again.");
             }
     
-            // Log the formatted phone for debugging
-            console.log('Formatted phone for API:', formattedPhone);
-    
             const response = await initializePaystackPayment({
                 email: email,
                 amount: amount,

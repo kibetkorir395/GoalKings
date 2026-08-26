@@ -20,6 +20,7 @@ const CURRENCY_CONFIG = {
 export function CurrencyProvider({ children }) {
   const [country, setCountry] = useState(null);
   const [currencyInfo, setCurrencyInfo] = useState(CURRENCY_CONFIG.default);
+  const [locality, setLocality] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export function CurrencyProvider({ children }) {
       try {
         const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
+        await setLocality(data);
         const countryCode = data.country_code;
 
         setCountry(countryCode);
@@ -59,6 +61,7 @@ export function CurrencyProvider({ children }) {
   const value = {
     country,
     currency: currencyInfo.currency,
+    locality,
     symbol: currencyInfo.symbol,
     name: currencyInfo.name,
     loading,
