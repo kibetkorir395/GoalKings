@@ -88,11 +88,10 @@ export default function FlutterwavePaymentV1() {
                   handleUpgrade()
                 } else {
                   // Fraud prevention triggered
-                  //alert("Payment verification failed! Data mismatch detected.");
                   setNotification({
                     isVisible: true,
                     type: 'error',
-                    message: err.message || 'Payment failed. Please try again.',
+                    message: "Payment verification failed! Data mismatch detected.",
                   });
                 }
                closePaymentModal(); // Programmatically close the modal
@@ -101,7 +100,7 @@ export default function FlutterwavePaymentV1() {
               setNotification({
                 isVisible: true,
                 type: 'error',
-                message: "Payment modal closed by user.",
+                message: "You cancelled the payment.",
               });
               setPaying(false);
             },

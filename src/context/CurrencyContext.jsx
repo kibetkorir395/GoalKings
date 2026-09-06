@@ -2,19 +2,24 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const CurrencyContext = createContext();
 
-/*const EXCHANGE_RATES = {
-  KES: { NGN: 12.5 },
-  NGN: { KES: 0.08 },
-};*/
-const EXCHANGE_RATES = {
-  KES: { NGN: 10.55 },
-  NGN: { KES: 0.095 },
-};
-
 const CURRENCY_CONFIG = {
-  KE: { currency: 'KES', symbol: 'KSH', name: 'Kenyan Shilling' },
-  NG: { currency: 'NGN', symbol: '₦', name: 'Nigerian Naira' },
-  default: { currency: 'KES', symbol: 'KSH', name: 'Kenyan Shilling' },
+  KE: { currency: 'KES', symbol: 'KSH', name: 'Kenyan Shilling', rate: 1 },
+  NG: { currency: 'NGN', symbol: '₦', name: 'Nigerian Naira', rate: 11.63 },
+  GH: { currency: 'GHS', symbol: 'GH₵', name: 'Ghanaian Cedi', rate: 0.11 },
+  ZA: { currency: 'ZAR', symbol: 'R', name: 'South African Rand', rate: 0.14 },
+  UG: { currency: 'UGX', symbol: 'USh', name: 'Ugandan Shilling', rate: 28.5 },
+  TZ: { currency: 'TZS', symbol: 'TSh', name: 'Tanzanian Shilling', rate: 20.2 },
+  RW: { currency: 'RWF', symbol: 'FRw', name: 'Rwandan Franc', rate: 10.1 },
+  ZM: { currency: 'ZMW', symbol: 'ZK', name: 'Zambian Kwacha', rate: 0.21 },
+  MW: { currency: 'MWK', symbol: 'MK', name: 'Malawian Kwacha', rate: 13.2 },
+  BF: { currency: 'XOF', symbol: 'CFA', name: 'West African CFA Franc', rate: 4.6 },
+  CI: { currency: 'XOF', symbol: 'CFA', name: 'West African CFA Franc', rate: 4.6 },
+  SN: { currency: 'XOF', symbol: 'CFA', name: 'West African CFA Franc', rate: 4.6 },
+  CM: { currency: 'XAF', symbol: 'FCFA', name: 'Central African CFA Franc', rate: 4.6 },
+  US: { currency: 'USD', symbol: '$', name: 'United States Dollar', rate: 0.0076 },
+  GB: { currency: 'GBP', symbol: '£', name: 'British Pound', rate: 0.006 },
+  EU: { currency: 'EUR', symbol: '€', name: 'Euro', rate: 0.007 },
+  default: { currency: 'KES', symbol: 'KSH', name: 'Kenyan Shilling', rate: 1 },
 };
 
 export function CurrencyProvider({ children }) {
@@ -49,12 +54,16 @@ export function CurrencyProvider({ children }) {
     if (currencyInfo.currency === 'KES') {
       return kesPrice;
     }
-
-    const rate = EXCHANGE_RATES.KES[currencyInfo.currency];
-    if (rate) {
-      return Math.round(kesPrice * rate);
+  
+    // Dynamically finds the correct country object matching the current currency selection
+    const matchingConfig = Object.values(CURRENCY_CONFIG).find(
+      (config) => config.currency === currencyInfo.currency
+    );
+  
+    if (matchingConfig && matchingConfig.rate) {
+      return Math.round(kesPrice * matchingConfig.rate);
     }
-
+  
     return kesPrice;
   };
 
