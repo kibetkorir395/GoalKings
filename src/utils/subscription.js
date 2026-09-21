@@ -1,7 +1,7 @@
 import { updateUser, updateUserLocality } from "../firebase";
 
 
-export const checkSubscriptionStatus = (user, setNotification) => {
+export const checkSubscriptionStatus = async (user, setNotification, setUser) => {
   if (!user || !user.isPremium) return;
 
   const currentTime = new Date();
@@ -16,7 +16,11 @@ export const checkSubscriptionStatus = (user, setNotification) => {
   };
 
   if (timeDifference >= timeLimits[user.subscription.billing]) {
-    updateUser(user.email, false, null, setNotification);
+    await updateUser(user.email, false, null, setNotification);
+    // Update local state so UI reacts immediately
+    if (setUser) {
+      setUser(prev => ({ ...prev, isPremium: false, subscription: null }));
+    }
   }
 };
 

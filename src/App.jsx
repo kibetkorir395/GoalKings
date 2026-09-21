@@ -52,7 +52,7 @@ function App() {
   }, [setUser]);
 
   useEffect(() => {
-    checkSubscriptionStatus(user, setNotification);
+    checkSubscriptionStatus(user, setNotification, setUser);
   }, [user]);
 
   useEffect(() => {
