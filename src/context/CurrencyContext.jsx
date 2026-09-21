@@ -40,7 +40,6 @@ export function CurrencyProvider({ children }) {
         const config = CURRENCY_CONFIG[countryCode] || CURRENCY_CONFIG.default;
         setCurrencyInfo(config);
       } catch (error) {
-        console.error('Failed to detect country:', error);
         setCurrencyInfo(CURRENCY_CONFIG.default);
       } finally {
         setLoading(false);

@@ -88,9 +88,8 @@ export default function ListUsers() {
       <div className="users-grid">
         {filteredUsers.length > 0 ? (
           filteredUsers.map(user => {
-            /*if (user.subDate) {
-              console.log(user);
-              deleteUserField(user.email, setNotification)
+            /*if ('subDate' in user) {
+              deleteUserField(user.id, setNotification)
             }*/
             return <UserCard key={user.email} user={user} />;
           })          

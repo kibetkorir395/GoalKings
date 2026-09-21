@@ -47,6 +47,13 @@ export default function Tips() {
     tabBox.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   };
 
+  const SUBSCRIPTION_ACCESS = {
+    Daily: 1,      // today + 0 future? or today + 1?
+    Weekly: 7,
+    Monthly: 30,
+    // add more plans as needed
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US');
@@ -115,7 +122,7 @@ export default function Tips() {
     };
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const dates = [];
     const today = new Date();
     for (let i = 0; i < 7; i++) {
@@ -127,10 +134,60 @@ export default function Tips() {
       dates.push(`${year}-${month}-${day}`);
     }
     setDays(dates.reverse());
-  }, []);
+  }, []);*/
 
   useEffect(() => {
+    const today = new Date();
+    let totalDays;
+    let startDate;
+  
+    if (user?.isPremium && user.subscription) {
+      // ----- Premium user: show dates based on plan -----
+      const subDate = user.subscription.subDate
+        ? new Date(user.subscription.subDate)
+        : today;
+  
+      const plan = user.subscription.plan || 'Daily';
+      totalDays = SUBSCRIPTION_ACCESS[plan] || 1;
+  
+      // Daily plan: show past days too (like free users), ending today.
+      // Other plans: start from today (or subDate if in the future) going forward.
+      if (plan === 'Daily') {
+        startDate = new Date(today);
+        startDate.setDate(startDate.getDate() - (totalDays - 1)); // ends today
+      } else {
+        startDate = subDate > today ? subDate : today;
+      }
+    } else {
+      // ----- Free / unsubscribed user: show last 7 days ending today -----
+      totalDays = 7;
+      startDate = new Date(today);
+      startDate.setDate(startDate.getDate() - (totalDays - 1));
+    }
+  
+    const dates = [];
+    for (let i = 0; i < totalDays; i++) {
+      const date = new Date(startDate);
+      date.setDate(date.getDate() + i);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      dates.push(`${year}-${month}-${day}`);
+    }
+  
+    setDays(dates);
+  }, [user]);
+
+  /*useEffect(() => {
     if (days) setCurrentDate(days[days.length - 1]);
+  }, [days]);*/
+
+
+  useEffect(() => {
+    if (!days?.length) return;
+    const today = new Date();
+    const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    setCurrentDate(days.includes(todayKey) ? todayKey : days[days.length - 1]);
   }, [days]);
 
   useEffect(() => {
@@ -158,8 +215,8 @@ export default function Tips() {
   }, [user]);
 
   const subscriptionData = {
-    ...pricings[0],
-    price: convertPrice(pricings[0].price),
+    ...pricings[1],
+    price: convertPrice(pricings[1].price),
     currency: symbol
   };
 
@@ -210,11 +267,12 @@ export default function Tips() {
         className="subscribe-btn"
         state={{ from: location, subscription: subscriptionData }}
         to="/subscribe"
+        style={{display: user?.isPremium ? 'none' : 'flex'}}
       >
         SUBSCRIBE TO VIEW VIP TIPS
       </NavLink>
 
-      <form className="type">
+      <form className="type" style={{display: 'none'}}>
         <fieldset>
           <input
             name="games-type"
@@ -249,7 +307,9 @@ export default function Tips() {
                 key={tip.id || index}
                 tip={tip}
                 isAdmin={isAdmin}
-                today={formatDate(days[days.length - 1])}
+                //today={formatDate(days[days.length - 1])}
+                today={formatDate(new Date())}   // M/D/YYYY to match tip.date
+								user={user}
               />
             ))}
       </div>

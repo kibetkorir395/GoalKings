@@ -15,7 +15,6 @@ const Dropdown = ({ options, value, onChange, placeholder = "Select..." }) => {
         onChange={(e) => onChange(e.target.value)}
         className="dropdown-select"
       >
-        <option value="">{placeholder}</option>
         {options.map(option => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -24,6 +23,13 @@ const Dropdown = ({ options, value, onChange, placeholder = "Select..." }) => {
       </select>
     );
   };
+
+  const planOptions = [
+    { value: '', label: 'Free' },
+    { value: 'daily', label: 'Daily' },
+    { value: 'weekly', label: 'Weekly' },
+    { value: 'monthly', label: 'Monthly' }
+  ];
 
 export default function EditUser() {
     const location = useLocation();
@@ -55,7 +61,7 @@ export default function EditUser() {
             setEmail(user.email)
             setUsername(user.username)
             setIsPremium(user.isPremium)
-            setSelectedPlan(user.subscription ? user.subscription.plan : '')
+            user.subscription && setSelectedPlan( user.subscription.plan)
             user.subscription?.subDate && setSubDate(toDateTimeLocal(user.subscription.subDate))
         }
     }, [user]);
@@ -72,10 +78,13 @@ export default function EditUser() {
         updateDoc(usercollref,{
             isPremium,
             subscription: selectedPlan === '' ? null : {
-                isPremium,
                 subDate,
-                billing: selectedPlan,
-                plan: selectedPlan,
+                billing: selectedPlan === 'daily' ? "Day" : selectedPlan.split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' '),
+                plan: selectedPlan.split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' '),
               }
         } ).then(response => {
             setNotification({
@@ -93,13 +102,6 @@ export default function EditUser() {
           setLoading(false)
       })
     }
-
-  const planOptions = [
-    { value: '', label: 'Free Plan' },
-    { value: 'daily', label: 'Daily' },
-    { value: 'weekly', label: 'Weekly' },
-    { value: 'monthly', label: 'Monthly' }
-  ];
 
   return (
     <div className='admin-tips'>

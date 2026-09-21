@@ -76,7 +76,6 @@ export default function FlutterwavePaymentV1() {
 
         handleFlutterPayment({
             callback: (response) => {
-                console.log("Payment response Data: ", response);
                 // 2. STAGEFRONT VERIFICATION CHECKPOINTS
                 // Do NOT trust the response blindly. Cross-check your parameters:
                 const isStatusValid = response.status === "successful" //|| response.status === "completed";

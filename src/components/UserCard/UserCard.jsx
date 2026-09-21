@@ -39,10 +39,6 @@ const UserCard = ({user}) => {
 		})}`;
 		return formattedDate;
 	}
-
-	useEffect(() => {
-		//user.subscription && console.log(user.email)
-	}, [user]);
   return (
   <NavLink className="card user-card"  to={`/users/${user.username ? "@" + user.username : user.email}`} state={user}>
     <div className="cover-bg"  style={{

@@ -11,7 +11,7 @@ export const pricings = [
 		plan: "Daily",
 		billing: "Day",
 		title: "Premium Pass — Unlock 24-hour unrestricted access to our top-tier predictions.",
-		price: 200,
+		price: 250,
 		features: [
 			"Elite 24-Hour VIP Entry — Get immediate access to our exclusive, short-window tips",
 			"Pro-Tier Football Analytics — Expertly analyzed selections from global football leagues",
@@ -24,7 +24,7 @@ export const pricings = [
 		plan: "Weekly",
 		billing: "Week",
 		title: "Elite Pass — Unlock premium access to our top-tier weekly analytics.",
-		price: 750,
+		price: 800,
 		features: [
 			"Max-Value Daily Slips — Handpicked 8+ odds combinations generated every day",
 			"Precision Correct Scores — Gain exclusive access to our highest-probability scoreline projections",
