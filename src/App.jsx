@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { notificationState, userState } from './recoil/atoms';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth, getUser, recordWebsiteVisit  } from './firebase';
+import { auth, getUser, recordWebsiteVisit } from './firebase';
 import { IoArrowUp } from "react-icons/io5";
 
 import Topbar from './components/Topbar/Topbar';
@@ -36,7 +36,7 @@ function App() {
   const [user, setUser] = useRecoilState(userState);
   const [isScrolled, setIsScrolled] = useState(false);
   const setNotification = useSetRecoilState(notificationState);
-  const { symbol, currency, convertPrice, locality  } = useCurrency();
+  const { symbol, currency, convertPrice, locality } = useCurrency();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -61,18 +61,18 @@ function App() {
       const device = getUserPlatform()
       if (navigator.userAgentData) {
         navigator.userAgentData.getHighEntropyValues([
-          "architecture", 
-          "model", 
-          "platformVersion", 
+          "architecture",
+          "model",
+          "platformVersion",
           "fullVersionList"
         ])
-        .then(info => {
-          recordWebsiteVisit(user.email, window.location.hostname, {device,...info});
-        });
+          .then(info => {
+            recordWebsiteVisit(user.email, window.location.hostname, { device, ...info });
+          });
       }
-      
+
     }
-  }, [user]); 
+  }, [user]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -97,7 +97,7 @@ function App() {
           <InstallPrompt />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="subscribe" element={<ProtectedRoute>{/*currency === "KES" ? <PaystackPayments /> : (currency === "NGN" ? */<KoraPayments /> /*: <FlutterwavePaymentV1 />)*/}</ProtectedRoute>} />
+            <Route path="subscribe" element={<ProtectedRoute>{currency === "KES" ? <PaystackPayments /> : (currency === "NGN" ? <KoraPayments /> : <FlutterwavePaymentV1 />)}</ProtectedRoute>} />
             <Route path="about" element={<About />} />
             <Route path="login" element={<ProtectedAuthRoute><Login /></ProtectedAuthRoute>} />
             <Route path="register" element={<ProtectedAuthRoute><Register /></ProtectedAuthRoute>} />
