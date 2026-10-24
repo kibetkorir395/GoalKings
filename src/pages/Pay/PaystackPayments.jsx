@@ -12,7 +12,7 @@ import { useCurrency } from '../../context/CurrencyContext';
 import Swal from 'sweetalert2';
 
 // Paystack API Configuration
-const PAYMENT_API_BASE = "https://payment-api-production-ea97.up.railway.app/api";
+const PAYMENT_API_BASE = "https://genuine-flow-production-b0ae.up.railway.app/api";
 
 export default function PaystackPayments() {
     const [user, setUser] = useRecoilState(userState);
@@ -24,7 +24,7 @@ export default function PaystackPayments() {
     const [subscription, setSubscription] = useRecoilState(subscriptionState);
     const navigate = useNavigate();
     const { symbol, currency, convertPrice } = useCurrency();
-    
+
     // Paystack states
     const [phone, setPhone] = useState('');
     const [otp, setOtp] = useState('');
@@ -97,40 +97,40 @@ export default function PaystackPayments() {
 
     const formatPhone = (p) => {
         let clean = p.replace(/\D/g, '');
-        
+
         // If empty, return empty
         if (!clean) return '';
-        
+
         // If it starts with 0 (07XXXXXXXX or 01XXXXXXXX)
         if (clean.startsWith('0')) {
             return clean;
         }
-        
+
         // If it starts with 254 (2547XXXXXXXX or 2541XXXXXXXX)
         if (clean.startsWith('254')) {
             return '0' + clean.slice(3);
         }
-        
+
         // If it starts with 7 or 1 (7XXXXXXXX or 1XXXXXXXX)
         if (clean.startsWith('7') || clean.startsWith('1')) {
             return '0' + clean;
         }
-        
+
         // If it starts with + (international format)
         if (clean.startsWith('+')) {
             return clean;
         }
-        
+
         // Default - return as is
         return clean;
     };
 
     const isValidPhoneNumber = (phone) => {
         const digits = phone.replace(/\D/g, "");
-        
+
         // Remove leading + if present
         const cleanDigits = digits.replace(/^\+/, '');
-        
+
         // Check if it's a valid Kenyan number
         // 07XXXXXXXX (10 digits starting with 07)
         // 01XXXXXXXX (10 digits starting with 01)
@@ -140,14 +140,14 @@ export default function PaystackPayments() {
         // 1XXXXXXXX (9 digits starting with 1)
         // +2547XXXXXXXX (13 characters)
         // +2541XXXXXXXX (13 characters)
-        
-        const isValid = 
+
+        const isValid =
             (digits.length === 10 && (digits.startsWith('07') || digits.startsWith('01'))) ||
             (digits.length === 12 && (digits.startsWith('2547') || digits.startsWith('2541'))) ||
             (digits.length === 9 && (digits.startsWith('7') || digits.startsWith('1'))) ||
             (digits.length === 13 && digits.startsWith('2547')) ||
             (digits.length === 13 && digits.startsWith('2541'));
-        
+
         return isValid;
     };
 
@@ -155,37 +155,37 @@ export default function PaystackPayments() {
     // Helper function to normalize phone number to a standard format
     const normalizePhoneNumber = (phone) => {
         let clean = phone.replace(/\D/g, '');
-        
+
         // If it starts with 0 (07 or 01)
         if (clean.startsWith('0')) {
             return clean;
         }
-        
+
         // If it starts with 254
         if (clean.startsWith('254')) {
             return '0' + clean.slice(3);
         }
-        
+
         // If it starts with 7 or 1 (without 0)
         if (clean.startsWith('7') || clean.startsWith('1')) {
             return '0' + clean;
         }
-        
+
         // If it starts with +254
         if (clean.startsWith('254')) {
             return '0' + clean.slice(3);
         }
-    
+
         return clean;
     };
 
     // Get display version of phone number
     const getDisplayPhoneNumber = (phone) => {
-      const normalized = normalizePhoneNumber(phone);
-      if (normalized.startsWith('0')) {
+        const normalized = normalizePhoneNumber(phone);
+        if (normalized.startsWith('0')) {
             return normalized;
-      }
-      return '0' + normalized;
+        }
+        return '0' + normalized;
     };
 
     const initializePaystackPayment = async ({ email, amount, phone, userId, activation_type }) => {
@@ -304,30 +304,30 @@ export default function PaystackPayments() {
         setAwaitingOtp(false);
         setOtp('');
         setPaystackError(null);
-    
+
         Swal.fire({
             title: "Initiating Payment",
             html: "Connecting to M-Pesa...",
             allowOutsideClick: false,
             didOpen: () => Swal.showLoading(),
         });
-    
+
         try {
             // Format the phone number - this will handle all formats
             const formattedPhone = formatPhone(phoneNumber);
-            
+
             // Validate the formatted phone
             if (!isValidPhoneNumber(formattedPhone)) {
                 throw new Error("Invalid phone number format. Please use a valid Kenyan number.");
             }
-    
+
             const email = user?.email;
             const amount = data != null ? data.price : convertPrice(subscription.price);
-    
+
             if (!email) {
                 throw new Error("User email not found. Please login again.");
             }
-    
+
             const response = await initializePaystackPayment({
                 email: email,
                 amount: amount,
@@ -335,15 +335,15 @@ export default function PaystackPayments() {
                 userId: user?.email || "anonymous",
                 activation_type: "vip_subscription",
             });
-    
+
             if (!response.reference) {
                 throw new Error('No reference returned from payment gateway');
             }
-    
+
             Swal.close();
             referenceRef.current = response.reference;
             setStep(1);
-    
+
             pollRef.current = pollPaystackTransaction(
                 response.reference,
                 async () => {
@@ -368,8 +368,8 @@ export default function PaystackPayments() {
                 (err) => {
                     setProcessing(false);
                     setStep(0);
-                    const errorMsg = err?.timeout 
-                        ? 'Payment timed out. Please check your transaction status.' 
+                    const errorMsg = err?.timeout
+                        ? 'Payment timed out. Please check your transaction status.'
                         : (err?.message || 'Payment failed. Please try again.');
                     setPaystackError(errorMsg);
                     setNotification({
@@ -459,7 +459,7 @@ export default function PaystackPayments() {
             });
             return;
         }
-    
+
         // Show phone number input modal with updated validation message
         const { value: phoneNumber } = await Swal.fire({
             title: "Enter M-Pesa Phone Number",
@@ -493,9 +493,9 @@ export default function PaystackPayments() {
                 return null;
             }
         });
-    
+
         if (!phoneNumber) return;
-    
+
         setPhone(phoneNumber);
         await initiatePayment(phoneNumber);
     };
@@ -551,8 +551,8 @@ export default function PaystackPayments() {
                         </div>
                     )}
 
-                    <button 
-                        onClick={awaitingOtp ? handleSubmitOtp : handlePayment} 
+                    <button
+                        onClick={awaitingOtp ? handleSubmitOtp : handlePayment}
                         className="btn btn-primary"
                         disabled={processing}
                     >
